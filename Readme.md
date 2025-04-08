@@ -1,5 +1,4 @@
-@Author Muhammed khalid
-this is my fork
+
 Summary
 The FastAPI app is set up in main.py with endpoints for users, transactions, search, and logs.
 
