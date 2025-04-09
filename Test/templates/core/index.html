@@ -1,0 +1,78 @@
+<body>
+    {% load static %}
+    {% include 'parts/navbar.html' %}
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    {% include 'parts/footer.html' %}
+</body>
+<!-- 
+<!doctype html>
+<html>
+    <head>
+        <title>ASU Store - Marketplace</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            header {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+            }
+            main {
+                padding: 20px;
+                text-align: center;
+            }
+            .auth-buttons {
+                margin: 20px 0;
+            }
+            .auth-buttons button {
+                margin: 5px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            footer {
+                background-color: #f1f1f1;
+                padding: 10px 20px;
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+            footer a {
+                margin: 0 10px;
+                text-decoration: none;
+                color: #4CAF50;
+            }
+            footer a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Welcome to ASU Store Marketplace</h1>
+        </header>
+        <main>
+            <h2>Join Us Today!</h2>
+            <div class="auth-buttons">
+                <button onclick="location.href='/signup'">Sign Up</button>
+                <button onclick="location.href='/login'">Log In</button>
+            </div>
+        </main>
+        <footer>
+            <a href="/contactus">Contact Us</a>
+            <a href="/about">About</a>
+            <a href="/terms">Terms and Policy</a>
+        </footer>
+    </body>
+</html> -->
