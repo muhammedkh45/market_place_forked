@@ -6,28 +6,28 @@
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <div class="signup-container">
         <h1>Create Account</h1>
-        <form action="/signup" method="POST">
+        <form action="{% url 'signUP' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+                {{form.username}}
             </div>
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="e.g. example@mail.com" required>
+                {{form.email}}
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
+                {{form.password1}}
             </div>
             <div class="form-group">
                 <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm_password" placeholder="••••••••" required>
+                {{form.password2}}
             </div>
             <button type="submit" class="signup-btn">Sign Up</button>
         </form>
         <div class="signup-footer">
-            <p>Already have an account? <a href="/login">Login here</a></p>
+            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
         </div>
     </div>
 </main>
