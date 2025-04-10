@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block content %}
+
 <main class="signup-wrapper">
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 
     <div class="signup-container">
         <h1>Welcome Back</h1>
-        <form action="/login" method="POST">
+        <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="e.g. example@mail.com" required>
+                <label for="username">Username</label>
+                {{form.username}}
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
+                {{form.password}}
             </div>
             <button type="submit" class="signup-btn">Login</button>
         </form>
         <div class="signup-footer">
-            <p>Don't have an account? <a href="/signup">Create one here</a></p>
+            <p>Don't have an account? <a href="{% url 'signUP' %}">Create one here</a></p>
         </div>
     </div>
 </main>

@@ -28,14 +28,15 @@ def signup(request):
     return render(request, 'core/signup.html', {
         'form': form
     })
-    
-def contact_us_form(request):
+
+
+def contactus(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
 
         if form.is_valid():
             form.save()
-            return redirect('/contactus/')
+            return redirect('/')
     else:
         form = ContactUsForm()
 
