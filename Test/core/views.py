@@ -3,6 +3,9 @@ from .forms import SignupForm, ContactUsForm
 def index(request):
     return render(request, 'core/index.html', {})
 
+def home(request):
+    return render(request,'core/home.html')
+
 
 def about(request):
     return render(request,'core/about.html', {})
