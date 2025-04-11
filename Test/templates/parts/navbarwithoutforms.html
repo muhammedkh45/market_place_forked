@@ -9,11 +9,20 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo" >Market<span>Store</span></a>
+            {% if user.is_authenticated %}
+            <a href="/home" class="logo" >THE DAILY GRIND<span> Store</span></a>
+            {% else %}
+            <a href="/" class="logo" >THE DAILY GRIND<span> Store</span></a>
+            {% endif %}
             <ul class="nav-links">
                 <li><a href="/contactus">Contact Us</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/terms">Terms and Policy</a></li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'images/user.png' %}" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    </a>
+                </li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -22,15 +31,5 @@
             </div>
         </div>
     </nav>
-
-    <!-- <script>
-        // mobile menu toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    </script> -->
 </body>
 {% endblock content %}

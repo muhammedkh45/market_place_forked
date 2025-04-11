@@ -1,0 +1,12 @@
+<body>
+    {% load static %}
+    {% include 'parts/navbarwithoutforms.html' %}
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    {% include 'parts/footer.html' %}
+</body>
