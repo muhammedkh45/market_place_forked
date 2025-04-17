@@ -1,3 +1,18 @@
+<!-- filepath: d:\work space\django\market_place_system\Marketplace\Test\templates\items\item.html -->
 {% extends 'base.html' %}
-{% block content%} 
-{%endblock content%}
+
+{% block content %}
+    <div class="item-detail">
+        <h1>{{ product.name }}</h1>
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 400px; max-height: 400px;">
+        <p>Price: {{ product.price }}</p>
+        <p>Description: {{ product.description }}</p>
+        <p>Category: {{ product.category }}</p>
+        <p>Created By: {{ product.created_by }}</p>
+        <p>Created At: {{ product.created_at }}</p>
+        <p>Quantity: {{ product.quantity }}</p>
+        <p><label for="quantity">amount:</label>
+            <input type="number" id="quantity" name="quantity" min="1" max="{{ product.quantity }}" value="1" style="width: 60px; text-align: center;"></p>
+        <p><button>Add to Cart</button></p>
+    </div>
+{% endblock content %}
