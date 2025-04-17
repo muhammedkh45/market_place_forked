@@ -18,11 +18,26 @@
                 <li><a href="/contactus">Contact Us</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/terms">Terms and Policy</a></li>
-                <li>
-                    <a href="">
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropbtn" onclick="toggleDropdown()">
                         <img src="{% static 'images/user.png' %}" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                     </a>
+                    <div class="dropdown-content" id="dropdownMenu" style="display: none; position: absolute; top: 100%; ; background-color: #333; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000; border-radius: 5px; overflow: hidden;">
+                        <ul style="list-style: none; margin: 0; padding: 0;">
+                            <li><a href="/profile" style="display: block; padding: 10px 15px; text-decoration: none; color: white;">Profile</a></li>
+                            <li><a href="/deposite" style="display: block; padding: 10px 15px; text-decoration: none; color: white;">Deposite</a></li>
+                            <li><a href="/inventory" style="display: block; padding: 10px 15px; text-decoration: none; color: white;">Inventory</a></li>
+                            <li><a href="/reports" style="display: block; padding: 10px 15px; text-decoration: none; color: white;">Reports</a></li>
+                            <li><a href="/logout" style="display: block; padding: 10px 15px; text-decoration: none; color: white;">Logout</a></li>
+                        </ul>
+                    </div>
                 </li>
+                <script>
+                    function toggleDropdown() {
+                        const dropdown = document.getElementById('dropdownMenu');
+                        dropdown.style.display = dropdown.style.display === 'none' ? 'flex' : 'none';
+                    }
+                </script>
                 <li>
                     <a href="">
                         <img src="{% static 'images/cart.png' %}" alt="Cart" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.onerror=null; this.src='{% static 'images/default_cart_logo.png' %}';">

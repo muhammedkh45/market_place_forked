@@ -17,9 +17,11 @@ class Items(models.Model):
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='photos/%y/%m/%d', blank=True, null=True)
     Available_Stock = models.BooleanField(default=True)
-    created_by = models.ForeignKey(User, related_name='items', on_delete=models.CASCADE)
+    owned_by = models.ForeignKey(User, related_name='items', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField(default=1)
+    for_sale = models.BooleanField(default=True)
+
 
     class Meta:
         ordering = ('name',)
