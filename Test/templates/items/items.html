@@ -1,6 +1,11 @@
 
 {% extends 'base.html' %}
 {% block content %}
+    <div class="search-bar" style="margin-bottom: 20px; text-align: center;">
+        <input type="text" name="query" placeholder="Search for items..." style="width: 60%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Search</button>
+        <button type="button" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Filter</button>
+    </div>
     {% for category in cat %}
         <div class="category-box" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
             <h1>{{ category.name }}</h1>
