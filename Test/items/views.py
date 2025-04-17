@@ -5,7 +5,7 @@ def item(request):
     return render(request,'items/item.html')
 
 def items(request):
-    return render(request,'items/items.html',{'pro':Items.objects.all()})
+    return render(request,'items/items.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
 
 
 

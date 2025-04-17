@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 {% block content %} 
-    {% for x in pro %}
-        <div class="item">
-            <h1>{{ x.name }}</h1>
-            <h1>{{ x.price }}</h1>
+{% for category in cat %}
+    <div class="category-box" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+        <h1>{{ category.name }}</h1>
+        <div class="items" style="display: flex; overflow-x: auto; gap: 10px;">
+            {% for product in pro %}
+                {% if product.category.id == category.id %}
+                    <div class="item" style="flex: 0 0 auto; text-align: center;">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px; max-height: 200px;">
+                        <h2>{{ product.name }}</h2>
+                        <p>Price: {{ product.price }}</p>
+                        <p>Available Stock: {{ product.Available_Stock }}</p>
+                        <button>Add to Cart</button>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
-    {% endfor %}
+    </div>
+{% endfor %}
+
 {% endblock content %}
