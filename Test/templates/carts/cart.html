@@ -1,0 +1,28 @@
+
+<!-- filepath: d:\work space\django\market_place_system\Marketplace\Test\templates\items\item.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="orders-container">
+        {% for order in orders %}
+            <div class="order-box" style="border: 1px solid #ccc; padding: 10px; margin: 10px; border-radius: 5px;">
+                <p>Item: {{ order.product.name }}</p>
+                <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" style="max-width: 150px; max-height: 150px;">
+                <p>Seller: {{ order.seller.username }}</p>
+                <p>Quantity: {{ order.quantity }}</p>
+                <p>Total Price: ${{ order.total_price }}</p>
+                <form action="{% url 'edit_order' order.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="new_amount_{{ order.id }}">New Amount:</label>
+                    <input type="number" id="new_amount_{{ order.id }}" name="quantity" min="1" max="{{ order.product.quantity }}" value="{{ order.quantity }}" required>
+                    <button type="submit" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Edit Amount</button>
+                </form>  <button onclick="location.href='{% url 'remove_order' order.id %}'">Remove Order</button> 
+            </div>
+        {% endfor %}
+        
+    <div class="order-box" style="border: 1px solid #ccc; padding: 10px; margin: 10px; border-radius: 5px; text-align: center;">
+        <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">Total Amount</h3>
+        <p style="font-size: 14px; font-weight: bold;">Total amount of all orders = ${{ total_price }}</p>
+        <button style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px;" >Pay</button>
+    </div>
+{% endblock content %}
