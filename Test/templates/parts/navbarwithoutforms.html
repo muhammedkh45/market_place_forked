@@ -15,12 +15,14 @@
             <a href="/" class="logo" >THE DAILY GRIND<span> Store</span></a>
             {% endif %}
             <ul class="nav-links">
-                <li><a href="/contactus">Contact Us</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/terms">Terms and Policy</a></li>
+                <div style="display: flex; justify-content: center; align-items: center; flex-grow: 1; gap: 20px;">
+                    <li><a href="/contactus" style="object-position: center;">Contact Us</a></li>
+                    <li><a href="/about" style="object-position: center;">About</a></li>
+                    <li><a href="/terms" style="object-position: center;">Terms and Policy</a></li>
+                </div>
                 <li class="dropdown">
                     <a href="javascript:void(0);" class="dropbtn" onclick="toggleDropdown()">
-                        <img src="{% static 'images/user.png' %}" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <img src="{% static 'images/user3.png' %}" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; margin-top: 10px;">
                     </a>
                     <div class="dropdown-content" id="dropdownMenu" style="display: none; position: absolute; top: 100%; ; background-color: #333; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000; border-radius: 5px; overflow: hidden;">
                         <ul style="list-style: none; margin: 0; padding: 0;">
@@ -40,7 +42,7 @@
                 </script>
                 <li>
                     <a href="">
-                        <img src="{% static 'images/cart.png' %}" alt="Cart" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.onerror=null; this.src='{% static 'images/default_cart_logo.png' %}';">
+                        <img src="{% static 'images/cart8.png' %}" alt="Cart" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; margin-top: 10px;" onerror="this.onerror=null; this.src='{% static 'images/default_cart_logo.png' %}';">
                     </a>
                 </li>
             </ul>
