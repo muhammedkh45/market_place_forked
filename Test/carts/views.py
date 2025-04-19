@@ -24,8 +24,13 @@ def add_to_cart(request):
             if order.quantity + quantity > product.quantity:
               messages.error(request, "Requested quantity exceeds available stock.")
               return redirect(request.META.get('HTTP_REFERER', '/'))
+            else:
+                messages.success(request, "Item added to cart successfully!")
+                redirect(request.META.get('HTTP_REFERER', '/'))
             order.quantity += quantity
             order.save()
+        else:
+            messages.success(request, "Item added to cart successfully!")
            
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
