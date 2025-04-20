@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .forms import SignupForm, ContactUsForm
+from items.models import Category, Items
 def index(request):
-    return render(request, 'core/index.html', {})
+    return render(request, 'core/index.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
 
 def home(request):
-    return render(request,'core/home.html')
+    return render(request,'items/items.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
 
 
 def about(request):
