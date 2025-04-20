@@ -1,15 +1,67 @@
-{% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/footer.css' %}">
 <main>
     <!-- Page content goes here -->
 </main>
 
 <footer class="footer">
+    <style>
+        .footer {
+            background-color: #222;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .footer h3 span {
+            color: #00dfc4; /* Cyan */
+        }
+
+        .footer p {
+            margin: 5px 0;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            list-style: none; /* Remove bullet points */
+            padding: 0;
+            margin: 15px 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between links */
+        }
+
+        .footer-links li {
+            display: inline; /* Ensure links are inline */
+        }
+
+        .footer-links a {
+            color: #00dfc4; /* Cyan color for links */
+            text-decoration: none; /* Remove underline */
+            font-size: 14px;
+            transition: color 0.3s ease; /* Smooth hover effect */
+        }
+
+        .footer-links a:hover {
+            color: #ffffff; /* Change to white on hover */
+            text-decoration: underline; /* Add underline on hover */
+        }
+    </style>
     <div class="footer-col">
         <h3>Market<span style="color: #00dfc4;">Store</span></h3>
         <p>Your go-to spot for discovering top deals, shops & more.</p>
-        <p>&copy; 2025 MarketShow. All rights reserved.</p>
+        <p>&copy; 2025 SALE Square. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+                <li><a href="{% url 'ContactUs' %}">Contact Us</a></li>
+                <li><a href="{% url 'About' %}">About</a></li>
+                <li><a href="{% url 'TermsandPolicy' %}">Terms and Policy</a></li>
     </div>
 </footer>
   
