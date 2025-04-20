@@ -1,34 +1,16 @@
+{% load static %}
 {% block content %}
-<footer class="footer" style="background-color: #121212; color: #000000;">
+<link rel="stylesheet" href="{% static 'css/footer.css' %}">
+<main>
+    <!-- Page content goes here -->
+</main>
+
+<footer class="footer">
     <div class="footer-col">
-        <h3 style="color: #ffffff;">Market<span style="color: #00dfc4;">Store</span></h3>
-        <p style="color: #ffffff;">Your go-to spot for discovering top deals, shops & more.</p>
-        <p style="text-align: center; color: #ffffff;">&copy; 2025 MarketShow. All rights reserved.</p>
+        <h3>Market<span style="color: #00dfc4;">Store</span></h3>
+        <p>Your go-to spot for discovering top deals, shops & more.</p>
+        <p>&copy; 2025 MarketShow. All rights reserved.</p>
     </div>
 </footer>
-    <!-- <div class="footer-container" style="display: flex; justify-content: center; align-items: center; text-align: center;"></div>
-        <div class="footer-col">
-            <h4 style="color: #ff9800;">Quick Links</h4>
-            <ul style="list-style: none; padding: 0; display: flex; gap: 15px;">
-                <li><a href="#" style="color: #000000; text-decoration: none;">Home</a></li>
-                <li><a href="#" style="color: #000000; text-decoration: none;">Shops</a></li>
-                <li><a href="#" style="color: #000000; text-decoration: none;">Deals</a></li>
-                <li><a href="#" style="color: #000000; text-decoration: none;">Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer-col" style="align-items: center; justify-content: center;">
-            <h4 style="color: #ff9800;">Follow Us</h4>
-            <div class="social-icons">
-                <a href="#"><img src="https://img.icons8.com/ios-filled/20/ffffff/facebook-new.png"/></a>
-                <a href="#"><img src="https://img.icons8.com/ios-filled/20/ffffff/instagram-new.png"/></a>
-                <a href="#"><img src="https://img.icons8.com/ios-filled/20/ffffff/twitter.png"/></a>
-                <a href="#"><img src="https://img.icons8.com/ios-filled/20/ffffff/linkedin.png"/></a>
-            </div>
-        </div>
-    </div> -->
-    <!-- <div class="footer-bottom" style="border-top: 1px solid #333333; padding-top: 10px;">
-        
-    </div> -->
-        
-</footer>
+  
 {% endblock content %}
