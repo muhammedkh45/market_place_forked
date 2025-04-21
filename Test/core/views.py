@@ -1,9 +1,15 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .forms import SignupForm, ContactUsForm
+from .forms import SignupForm, ContactUsForm, LoginForm
 from items.models import Category, Items
+from django.contrib.auth import views as auth_views
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 def index(request):
+    request.session.flush()
     return render(request, 'core/index.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
 
+@login_required(login_url='login')
 def home(request):
     return render(request,'items/items.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
 
@@ -47,6 +53,15 @@ def contactus(request):
     return render(request, 'core/contactus.html', {
         'form': form
     })
+
+
+class CustomLoginView(auth_views.LoginView):
+    template_name = 'core/login.html'
+    authentication_form = LoginForm
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Invalid username or password.')
+        return super().form_invalid(form)
 
 
 
