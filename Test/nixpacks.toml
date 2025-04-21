@@ -1,0 +1,27 @@
+# nixpacks.toml
+# Tell Nixpacks to use Python
+providers = ["python"]
+
+[variables]
+# Pin the Python version you want
+NIXPACKS_PYTHON_VERSION = "3.11"
+# Speed up pip a bit by skipping version check
+PIP_DISABLE_PIP_VERSION_CHECK = "1"
+
+[phases.install]
+commands = [
+  # Install all your dependencies from requirements.txt
+  "pip install -r requirements.txt"
+]
+
+[phases.build]
+commands = [
+  # Run Django migrations
+  "python manage.py migrate --noinput",
+  # Collect your static files
+  "python manage.py collectstatic --noinput"
+]
+
+[phases.start]
+# How to start your web server; $PORT is injected by Railway
+command = "gunicorn core.wsgi:application --bind 0.0.0.0:${PORT}"
