@@ -37,5 +37,20 @@
     </style>
 
     {% include 'parts/footer.html' %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle message timeouts
+        const messages = document.querySelectorAll('.alert');
+        messages.forEach(message => {
+            setTimeout(() => {
+                message.classList.add('fade-out');
+                setTimeout(() => {
+                    message.remove();
+                }, 500); // Remove after fade-out animation completes
+            }, 5000); // 5 seconds timeout
+        });
+    });
+    </script>
 </body>
 </html>
