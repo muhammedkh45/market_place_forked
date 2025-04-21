@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Items
-
+from django.contrib.auth.decorators import login_required
 def item(request, item_id):
     # Fetch the specific item by its ID
     product = get_object_or_404(Items, id=item_id)

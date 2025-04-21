@@ -1,12 +1,16 @@
-<body>
-    {% load static %}
-    {% include 'parts/navbarwithoutforms.html' %}
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+{% extends 'base.html' %}
+{% load static %}
 
-    <main>
-        {% block content %}
-        {% endblock content %}
-    </main>
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
 
-    {% include 'parts/footer.html' %}
-</body>
+
+{% block content %}
+{% endblock %}
+
+
