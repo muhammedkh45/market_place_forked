@@ -1,11 +1,14 @@
-<body>
-    {% load static %}
-    {% include 'parts/navbar.html' %}  
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+{% extends 'base.html' %}
+{% load static %}
 
-    <main>
-        {% block content %}
-        <link rel="stylesheet" href="{% static 'css/items.css' %}">
+{% block title %}Welcome to SALE Square{% endblock %}
+
+{% block navbar %}
+    {% include 'parts/navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/items.css' %}">
 
 <div class="main-container">
     <!-- Sidebar -->
@@ -97,8 +100,4 @@
         });
     });
 </script>
-        {% endblock content %}
-    </main>
-
-    {% include 'parts/footer.html' %}
-</body>
+{% endblock content %}

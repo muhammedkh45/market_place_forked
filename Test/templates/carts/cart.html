@@ -1,4 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Cart{% endblock %}
+
 {% block navbar %}
     {% if user.is_authenticated %}
         {% include 'parts/navbarwithoutforms.html' %}
@@ -48,5 +52,4 @@
         <button class="pay-btn">Pay</button>
     </div>
 </div>
-
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
-from .models import ContactMessage
+from .models import ContactMessage, Review, UserProfile
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -60,3 +60,62 @@ class ContactUsForm(forms.ModelForm):
                 'class' :'w-full py-4 px-6 rounded-xl'
             }),
         }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.NumberInput(attrs={
+                'min': 1,
+                'max': 5,
+                'class': 'form-control',
+                'placeholder': 'Rating (1-5)'
+            }),
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Write your review here...',
+                'rows': 4
+            })
+        }
+
+class UserProfileForm(forms.ModelForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'First Name'
+    }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Last Name'
+    }))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Email'
+    }))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Tell us about yourself...',
+        'rows': 4
+    }))
+    phone = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Phone Number'
+    }))
+    address = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Address'
+    }))
+    photo = forms.ImageField(required=False, widget=forms.FileInput(attrs={
+        'class': 'form-control'
+    }))
+
+    class Meta:
+        model = UserProfile
+        fields = ['photo', 'bio', 'phone', 'address']
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        if self.instance.user:
+            self.fields['first_name'].initial = self.instance.user.first_name
+            self.fields['last_name'].initial = self.instance.user.last_name
+            self.fields['email'].initial = self.instance.user.email
