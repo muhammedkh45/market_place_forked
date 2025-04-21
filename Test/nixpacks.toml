@@ -22,6 +22,7 @@ commands = [
   "python manage.py collectstatic --noinput"
 ]
 
+
 [phases.start]
-# How to start your web server; $PORT is injected by Railway
+# Replace `core` with your Django project folder if needed
 command = "gunicorn core.wsgi:application --bind 0.0.0.0:${PORT}"
