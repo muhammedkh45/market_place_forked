@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Contact us{% endblock %}
-
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
 {% block content %}
 <main class="contact-main">
     <div class="contact-container">

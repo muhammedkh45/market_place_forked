@@ -22,6 +22,8 @@
 <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 <div class="orders-container">
     {% for order in orders %}
+    {% comment %} add filter to make only order of user appear {% endcomment %}
+    {% if order.buyer.user == user %}
         <div class="order-card">
             <div class="order-img">
                 <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}">
@@ -44,12 +46,15 @@
                 <button onclick="location.href='{% url 'remove_order' order.id %}'" class="remove-btn">Remove</button>
             </div>
         </div>
+    {% endif %}
     {% endfor %}
 
     <div class="order-card total-summary">
         <h3>Total Amount</h3>
         <p class="price">Total amount of all orders = ${{ total_price }}</p>
-        <button class="pay-btn">Pay</button>
+        <form action="{% url 'process_payment' %}" method="GET">
+            <button type="submit" class="pay-btn">Pay</button>
+        </form> 
     </div>
 </div>
 {% endblock content %}

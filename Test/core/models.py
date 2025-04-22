@@ -13,12 +13,28 @@ class ContactMessage(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/default.png', blank=True)
+    photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/defult_image.png', blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    age = models.PositiveIntegerField(blank=True, null=True)
+    balance = models.PositiveIntegerField(default=1000)
+    def get_age(self):
+        if self.date_of_birth:
+            from datetime import date
+            today = date.today()
+            age = today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+            return age
+        return None
+    @staticmethod
+    def get_profile_by_user(user):
+        try:
+            return UserProfile.objects.get(user=user)
+        except UserProfile.DoesNotExist:
+            return None
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
@@ -44,7 +60,7 @@ class Review(models.Model):
         (5, '5 Stars'),
     ]
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='reviews')
     product = models.ForeignKey('items.Items', on_delete=models.CASCADE, related_name='reviews')
     rating = models.IntegerField(choices=RATING_CHOICES)
     comment = models.TextField()
@@ -55,4 +71,4 @@ class Review(models.Model):
         unique_together = ('user', 'product')
 
     def __str__(self):
-        return f"Review by {self.user.username} for {self.product.name}"
+        return f"Review by {self.user.user.username} for {self.product.name}"

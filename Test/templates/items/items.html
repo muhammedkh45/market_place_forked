@@ -61,7 +61,7 @@
                 <h1>{{ category.name }}</h1>
                 <div class="items">
                     {% for product in pro %}
-                        {% if product.category.id == category.id and product.for_sale %}
+                        {% if product.category.id == category.id and product.for_sale and product.owned_by.user != user %}
                             <div class="item" 
                                  data-category="{{ product.category.id }}" 
                                  data-price="{{ product.price }}">

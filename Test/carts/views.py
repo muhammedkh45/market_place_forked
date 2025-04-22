@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Order
+from .models import Order , Payment
 from items.models import Items
+from core.models import UserProfile
 
 @login_required(login_url='login')  # Make sure to set this to your actual login URL name
 def add_to_cart(request):
@@ -14,10 +15,10 @@ def add_to_cart(request):
         if quantity > product.quantity:
             messages.error(request, "Requested quantity exceeds available stock.")
             return redirect(request.META.get('HTTP_REFERER', '/'))
-
+        user_profile=UserProfile.get_profile_by_user(user=request.user)
         # Create or update the order
         order, created = Order.objects.get_or_create(
-            buyer=request.user,
+            buyer=user_profile,
             product=product,
             defaults={"quantity": quantity, "seller": product.owned_by},
         )
@@ -37,14 +38,16 @@ def add_to_cart(request):
 
 @login_required(login_url='login')
 def index(request):
-    orders = Order.objects.filter(buyer=request.user)
+    user_profile=UserProfile.get_profile_by_user(user=request.user)
+    orders = Order.objects.filter(buyer=user_profile)
     total_price = sum(order.total_price for order in orders)
     return render(request, 'carts/cart.html', {'orders': orders, 'total_price': total_price})
 
 
 @login_required(login_url='login')
 def edit_order(request, order_id):
-    order = get_object_or_404(Order, id=order_id, buyer=request.user)
+    user_profile=UserProfile.get_profile_by_user(user=request.user)
+    order = get_object_or_404(Order, id=order_id, buyer=user_profile)
 
     if request.method == "POST":
         new_quantity = int(request.POST.get("quantity", 1))
@@ -61,7 +64,37 @@ def edit_order(request, order_id):
 
 @login_required(login_url='login')
 def remove_order(request, order_id):
-    order = get_object_or_404(Order, id=order_id, buyer=request.user)
+    user_profile=UserProfile.get_profile_by_user(user=request.user)
+    order = get_object_or_404(Order, id=order_id, buyer=user_profile)
     order.delete()
     messages.success(request, "Order removed successfully!")
     return redirect(request.META.get('HTTP_REFERER', '/'))
+def process_payment(request):
+    if request.method == 'GET':
+        user_profile=UserProfile.get_profile_by_user(user=request.user)
+        orders = Order.objects.filter(buyer=user_profile)
+        total_price = sum(order.total_price for order in orders)
+        user_profile2 = UserProfile.get_profile_by_user(request.user)
+        if total_price > user_profile2.balance:
+            messages.error(request, "Insufficient balance to complete the payment.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+  # Redirect back to the cart page
+        if total_price == 0:
+            messages.error(request, "No orders in the cart to process payment.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+  # Redirect back to the cart page
+
+        for order in orders:
+            payment = Payment.objects.create(
+                seller=order.seller,
+                buyer=order.buyer,
+                product=order.product,
+                quantity=order.quantity,
+                total_price=order.total_price,
+                order_id=order.id
+            )
+            payment.process_payment()
+
+        messages.success(request, "Payment processed successfully!")
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+  # Redirect back to the cart page

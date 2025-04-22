@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Terms and Conditions{% endblock %}
-
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
 {% block content %}
 <div class="terms-container">
     <h1 class="terms-title">Marketplace Terms and Conditions</h1>
