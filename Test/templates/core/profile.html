@@ -37,6 +37,10 @@
             <h1>{{ user.username }}'s Profile</h1>
             <p class="member-since">Member since {{ user.date_joined|date:"F j, Y" }}</p>
         </div>
+        <div class="profile-balance">
+            <h2>Balance</h2>
+            <p>${{ profile.balance }}</p>
+        </div>
     </div>
 
     <div class="profile-content">
