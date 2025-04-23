@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="depositform-wrapper">
+  <h2>💳 Mock Deposit</h2>
+  <form id="depositForm" method="post">
+    {% csrf_token %} <!-- 🔐 CSRF token -->
+
+    <div class="form-group">
+      <label>Card Number</label>
+      <input type="text" name="card_number" maxlength="16" required />
+    </div>
+
+    <div class="form-group">
+      <label>Expiration Month (MM)</label>
+      <input type="text" name="expiration_month" maxlength="2" required />
+    </div>
+
+    <div class="form-group">
+      <label>Expiration Year (YYYY)</label>
+      <input type="text" name="expiration_year" maxlength="4" required />
+    </div>
+
+    <div class="form-group">
+      <label>CVC</label>
+      <input type="text" name="cvc" maxlength="4" required />
+    </div>
+
+    <div class="form-group">
+      <label>Deposit Amount ($)</label>
+      <input type="number" name="deposit_amount" step="0.01" required />
+    </div>
+
+    <button type="submit">Submit Deposit</button>
+  </form>
+
+  <div id="responseMessage"></div>
+</div>
+
+<style>
+  .depositform-wrapper {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  input {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #218838;
+  }
+
+  .success {
+    color: green;
+    margin-top: 10px;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+</style>
+
+<script>
+  // Get CSRF token from cookies
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie('csrftoken');
+  const form = document.getElementById('depositForm');
+  const responseMessage = document.getElementById('responseMessage');
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => data[key] = value);
+
+    fetch('/deposit/process-payment/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken  
+      },
+      body: JSON.stringify(data)
+    })
+    .then(async (response) => {
+      let result;
+      try {
+        result = await response.json();
+      } catch (err) {
+        throw new Error("Server returned invalid JSON. 1");
+      }
+
+      if (!response.ok) {
+        throw new Error(result.error || "Something went wrong.");
+      }
+
+      responseMessage.innerHTML = `
+        <p class="success">✅ Deposit Successful!</p>
+        <p>Transaction ID: ${result.transaction_id}</p>
+        <p>Amount: $${result.amount}</p>
+      `;
+    })
+    .catch(error => {
+      responseMessage.innerHTML = `<p class="error">❌ Request failed: ${error.message}</p>`;
+    });
+  });
+</script>
+{% endblock %}

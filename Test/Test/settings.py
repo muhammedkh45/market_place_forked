@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'items.apps.ItemsConfig',
     'dashboard.apps.DashboardConfig',
+    'deposit.apps.DepositConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
