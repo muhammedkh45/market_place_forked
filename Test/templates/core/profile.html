@@ -36,6 +36,13 @@
         <div class="profile-title">
             <h1>{{ user.username }}'s Profile</h1>
             <p class="member-since">Member since {{ user.date_joined|date:"F j, Y" }}</p>
+            {% if profile.date_of_birth %}
+                <p class="user-age" style="font-size: 16px; color: #555; font-weight: bold; margin-top: 5px;">
+                    Age: <span style="color: #555; font-weight: bold;">{{ profile.age }}</span>
+                </p>
+            {% endif %}
+                
+            
         </div>
         <div class="profile-balance">
             <h2>Balance</h2>
@@ -127,4 +134,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 {% endblock %}

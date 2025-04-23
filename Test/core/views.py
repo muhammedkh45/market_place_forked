@@ -29,7 +29,9 @@ def profile(request):
             user_profile.phone = form.cleaned_data['phone'] 
             user_profile.bio = form.cleaned_data['bio']
             user_profile.address = form.cleaned_data['address']
-            user_profile.date_of_birth = form.cleaned_data['date_of_birth']
+            if form.cleaned_data['date_of_birth'] :
+                user_profile.date_of_birth = form.cleaned_data['date_of_birth']
+                user_profile.age = user_profile.get_age()
             
             if form.cleaned_data.get('photo'):
                 user_profile.photo = form.cleaned_data['photo']
