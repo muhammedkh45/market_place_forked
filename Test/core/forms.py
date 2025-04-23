@@ -93,6 +93,14 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Email'
     }))
+    date_of_birth = forms.DateField(required=False, widget=forms.DateInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Date of Birth YYYY-MM-DD',
+            'type': 'date'
+        },
+        format='%Y-%m-%d'
+        )) 
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={
         'class': 'form-control',
         'placeholder': 'Tell us about yourself...',
@@ -110,9 +118,11 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control'
     }))
 
+    
+
     class Meta:
         model = UserProfile
-        fields = ['photo', 'bio', 'phone', 'address']
+        fields = ['photo', 'bio', 'phone', 'address', 'date_of_birth']
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)

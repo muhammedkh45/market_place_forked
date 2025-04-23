@@ -41,8 +41,9 @@
             <h2>Balance</h2>
             <p>${{ profile.balance }}</p>
         </div>
+        
     </div>
-
+    
     <div class="profile-content">
         <form method="POST" enctype="multipart/form-data" class="profile-form">
             {% csrf_token %}
@@ -59,6 +60,10 @@
                 <div class="form-group">
                     <label for="id_email">Email</label>
                     {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label for="date_of_birth">Date of Birth</label>
+                    {{ form.date_of_birth }}
                 </div>
             </div>
 
@@ -95,13 +100,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    
     const photoInput = document.getElementById('id_photo');
-    const photoLabel = document.querySelector('.change-photo-btn');
     const profileImage = document.querySelector('.profile-photo img');
 
-    photoLabel.addEventListener('click', function() {
-        photoInput.click();
-    });
+    
 
     photoInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
