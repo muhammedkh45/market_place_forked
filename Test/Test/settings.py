@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'items.apps.ItemsConfig',
     'carts.apps.CartsConfig',
+    'dashboard',
+
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,4 @@ MESSAGE_TAGS = {
     message_constants.WARNING: 'warning',
     message_constants.ERROR: 'danger',
 }
+    
