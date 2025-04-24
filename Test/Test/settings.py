@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+from django.contrib.messages import constants as message_constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,10 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
     'items.apps.ItemsConfig',
+<<<<<<< HEAD
     'dashboard.apps.DashboardConfig',
     'deposit.apps.DepositConfig',
     'rest_framework',
     'rest_framework.authtoken',
+=======
+    'carts.apps.CartsConfig',
+    'dashboard',
+
+>>>>>>> report-depo-dash
 ]
 
 MIDDLEWARE = [
@@ -120,10 +127,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATIC_ROOT = BASE_DIR / 'static'
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'Test/static',
+    os.path.join(BASE_DIR,'Test/static')
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -133,3 +140,12 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/home'
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: 'secondary',
+    message_constants.INFO: 'info',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR: 'danger',
+}
+    

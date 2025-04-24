@@ -1,78 +1,103 @@
-<body>
-    {% load static %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome to SALE Square{% endblock %}
+
+{% block navbar %}
     {% include 'parts/navbar.html' %}
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+{% endblock %}
 
-    <main>
-        {% block content %}
-        {% endblock content %}
-    </main>
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/items.css' %}">
 
-    {% include 'parts/footer.html' %}
-</body>
-<!-- 
-<!doctype html>
-<html>
-    <head>
-        <title>ASU Store - Marketplace</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-            }
-            header {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                text-align: center;
-            }
-            main {
-                padding: 20px;
-                text-align: center;
-            }
-            .auth-buttons {
-                margin: 20px 0;
-            }
-            .auth-buttons button {
-                margin: 5px;
-                padding: 10px 20px;
-                font-size: 16px;
-                cursor: pointer;
-            }
-            footer {
-                background-color: #f1f1f1;
-                padding: 10px 20px;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-            footer a {
-                margin: 0 10px;
-                text-decoration: none;
-                color: #4CAF50;
-            }
-            footer a:hover {
-                text-decoration: underline;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <h1>Welcome to ASU Store Marketplace</h1>
-        </header>
-        <main>
-            <h2>Join Us Today!</h2>
-            <div class="auth-buttons">
-                <button onclick="location.href='/signup'">Sign Up</button>
-                <button onclick="location.href='/login'">Log In</button>
+<div class="main-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Filter By</h3>
+
+        <div class="filter-section">
+            <h4>Categories</h4>
+            {% for category in cat %}
+                <div>
+                    <input type="checkbox" class="category-filter" value="{{ category.id }}" id="cat-{{ category.id }}">
+                    <label for="cat-{{ category.id }}">{{ category.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="filter-section">
+            <h4>Price Range</h4>
+            <label for="min-price">Min:</label>
+            <input type="number" id="min-price" class="price-filter" placeholder="0">
+            <br>
+            <label for="max-price">Max:</label>
+            <input type="number" id="max-price" class="price-filter" placeholder="9999">
+        </div>
+
+        <button id="apply-filters">Apply Filters</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="search-bar">
+            <input type="text" name="query" placeholder="Search for items...">
+            <button type="submit">Search</button>
+            <button type="button">Filter</button>
+        </div>
+
+        {% for category in cat %}
+            <div class="category-box" data-category="{{ category.id }}">
+                <h1>{{ category.name }}</h1>
+                <div class="items">
+                    {% for product in pro %}
+                        {% if product.category.id == category.id and product.for_sale %}
+                            <div class="item" 
+                                data-category="{{ product.category.id }}" 
+                                data-price="{{ product.price }}">
+                                <a href="{% url 'item' product.id %}">
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                </a>
+                                <h2>{{ product.name }}</h2>
+                                <p>Price: {{ product.price }}</p>
+                                <p>Available Stock: {{ product.quantity }}</p>
+                                <label for="quantity-{{ product.id }}">amount:</label>
+
+                            <form action="{% url 'add_to_cart' %}" method="get">
+                                <input type="number" id="quantity-{{ product.id }}" name="quantity" min="1" max="{{ product.quantity }}" value="1"></p>
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit">Add to Cart</button>
+                            </form>    
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-        </main>
-        <footer>
-            <a href="/contactus">Contact Us</a>
-            <a href="/about">About</a>
-            <a href="/terms">Terms and Policy</a>
-        </footer>
-    </body>
-</html> -->
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.getElementById('apply-filters').addEventListener('click', () => {
+        const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+        const minPrice = parseFloat(document.getElementById('min-price').value) || 0;
+        const maxPrice = parseFloat(document.getElementById('max-price').value) || Infinity;
+
+        // Loop through each item
+        document.querySelectorAll('.item').forEach(item => {
+            const itemCategory = item.dataset.category;
+            const itemPrice = parseFloat(item.dataset.price);
+
+            const showByCategory = selectedCategories.length === 0 || selectedCategories.includes(itemCategory);
+            const showByPrice = itemPrice >= minPrice && itemPrice <= maxPrice;
+
+            item.style.display = (showByCategory && showByPrice) ? 'block' : 'none';
+        });
+
+        // Now hide entire category boxes if all items inside are hidden
+        document.querySelectorAll('.category-box').forEach(box => {
+            const visibleItems = box.querySelectorAll('.item:not([style*="display: none"])');
+            box.style.display = visibleItems.length > 0 ? 'block' : 'none';
+        });
+    });
+</script>
+{% endblock content %}

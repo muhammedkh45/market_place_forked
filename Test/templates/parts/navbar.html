@@ -9,11 +9,11 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo" >THE DAILY GRIND<span> Store</span></a>
+            <a href="/" class="logo" >SALES<span> Square</span></a>
             <ul class="nav-links">
-                <li><a href="{% url 'ContactUs' %}">Contact Us</a></li>
+                <!-- <li><a href="{% url 'ContactUs' %}">Contact Us</a></li>
                 <li><a href="{% url 'About' %}">About</a></li>
-                <li><a href="{% url 'TermsandPolicy' %}">Terms and Policy</a></li>
+                <li><a href="{% url 'TermsandPolicy' %}">Terms and Policy</a></li> -->
                 <li><a href="{% url 'signUP' %}" class="btn">Sign up</a></li>
                 <li><a href="{% url 'login' %}" class="btn">Log In</a></li>
             </ul>
@@ -24,15 +24,5 @@
             </div>
         </div>
     </nav>
-
-    <!-- <script>
-        // mobile menu toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    </script> -->
 </body>
 {% endblock content %}

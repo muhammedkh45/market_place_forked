@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Report</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="wrapper">
+        <h1><i class="fas fa-file-invoice"></i> Transaction Report</h1>
+
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Buyer</th>
+                    <th>Seller</th>
+                    <th>Product</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.transaction_id }}</td>
+                    <td class="{% if t.status == 'transaction' %}green{% else %}orange{% endif %}">
+                        {{ t.status|capfirst }}
+                    </td>
+                    <td>{{ t.buyer.user.username }}</td>
+                    <td>{{ t.seller.user.username }}</td>
+                    <td>{{ t.product.name }}</td>
+                    <td>${{ t.total_price }}</td>
+                    <td>{{ t.date|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            {% if request.user.profile == t.buyer %}
+                                <a href="{% url 'dashboard:make_review' t.transaction_id %}" class="btn review">
+                                    <i class="fas fa-eye"></i> Review
+                                </a>
+                            {% endif %}
+                            <a href="{% url 'dashboard:print_transaction' t.transaction_id %}" class="btn print">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="no-transactions">
+                        <i class="fas fa-info-circle"></i> No transactions found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

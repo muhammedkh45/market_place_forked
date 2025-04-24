@@ -1,12 +1,56 @@
-<body>
-    {% load static %}
-    {% include 'parts/navbarwithoutforms.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Marketplace{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/custom-bootstrap-alerts.css' %}">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    {% block navbar %}
+        {% include 'parts/navbar.html' %}
+    {% endblock %}
 
     <main>
         {% block content %}
         {% endblock content %}
     </main>
 
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0fcfb;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00e0d0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00bfa6;
+        }
+    </style>
+
     {% include 'parts/footer.html' %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle message timeouts
+        const messages = document.querySelectorAll('.alert');
+        messages.forEach(message => {
+            setTimeout(() => {
+                message.classList.add('fade-out');
+                setTimeout(() => {
+                    message.remove();
+                }, 500); // Remove after fade-out animation completes
+            }, 5000); // 5 seconds timeout
+        });
+    });
+    </script>
 </body>
+</html>

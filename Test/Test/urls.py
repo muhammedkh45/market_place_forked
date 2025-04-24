@@ -22,7 +22,15 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('core.urls')),
+<<<<<<< HEAD
     path('products/',include('items.urls')),
     path('dashboard/',include('dashboard.urls')),
     path('deposit/',include('deposit.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+=======
+    path('home/products/',include('items.urls')),
+    path('home/', include('carts.urls')),
+    path('dashboard/', include('dashboard.urls')),
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+>>>>>>> report-depo-dash

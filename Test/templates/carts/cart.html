@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock %}
+
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<div class="orders-container">
+    {% for order in orders %}
+    {% comment %} add filter to make only order of user appear {% endcomment %}
+    {% if order.buyer.user == user %}
+        <div class="order-card">
+            <div class="order-img">
+                <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}">
+            </div>
+
+            <div class="order-details">
+                <h3>{{ order.product.name }}</h3>
+                <p><strong>Seller:</strong> {{ order.seller.username }}</p>
+                <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+                <p class="price"><strong>Total:</strong> ${{ order.total_price }}</p>
+            </div>
+
+            <div class="order-actions">
+                <form action="{% url 'edit_order' order.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="new_amount_{{ order.id }}">New Amount:</label>
+                    <input type="number" id="new_amount_{{ order.id }}" name="quantity" min="1" max="{{ order.product.quantity }}" value="{{ order.quantity }}" required>
+                    <button type="submit" class="edit-btn">Update</button>
+                </form>
+                <button onclick="location.href='{% url 'remove_order' order.id %}'" class="remove-btn">Remove</button>
+            </div>
+        </div>
+    {% endif %}
+    {% endfor %}
+
+    <div class="order-card total-summary">
+        <h3>Total Amount</h3>
+        <p class="price">Total amount of all orders = ${{ total_price }}</p>
+        <form action="{% url 'process_payment' %}" method="GET">
+            <button type="submit" class="pay-btn">Pay</button>
+        </form> 
+    </div>
+</div>
+{% endblock content %}
