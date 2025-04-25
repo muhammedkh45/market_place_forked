@@ -14,16 +14,15 @@ class LoginForm(AuthenticationForm):
     }))
 
 class SignupForm(UserCreationForm):
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-   
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'placeholder': 'Your email address'"e.g. example@mail.com",
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
-   
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
@@ -93,14 +92,6 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Email'
     }))
-    date_of_birth = forms.DateField(required=False, widget=forms.DateInput(
-        attrs={
-            'class': 'form-control',
-            'placeholder': 'Date of Birth YYYY-MM-DD',
-            'type': 'date'
-        },
-        format='%Y-%m-%d'
-        )) 
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={
         'class': 'form-control',
         'placeholder': 'Tell us about yourself...',
@@ -118,11 +109,9 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control'
     }))
 
-    
-
     class Meta:
         model = UserProfile
-        fields = ['photo', 'bio', 'phone', 'address', 'date_of_birth']
+        fields = ['photo', 'bio', 'phone', 'address']
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)

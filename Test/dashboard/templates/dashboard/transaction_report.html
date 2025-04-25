@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Report</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="wrapper">
+        <h1><i class="fas fa-file-invoice"></i> Transaction Report</h1>
+
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>User</th>
+                    <th>Recipient</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--transactions-->
+                {% for item in combined_data %}
+                <tr>
+                    {% if item.type == 'Transaction' %}
+                        <td>T- {{ item.data.transaction_id }}</td>
+                    {% elif item.type == 'Deposit' %}
+                        <td>D- {{ item.data.id }}</td>                    
+                    {% endif %}
+                    <td>{{ item.type }}</td>
+                    {% if item.type == 'Transaction' %}
+                        <td>{{ item.data.buyer }}</td>
+                        <td> {{ item.data.seller }}</td>
+                        <td>{{ item.data.product }}</td>
+                        <td>{{ item.data.total_price }}</td>
+                    {% elif item.type == 'Deposit' %}
+                        <td>{{ item.data.user }}</td>
+                        <td>System</td>
+                        <td>N/A</td>
+                        <td>{{ item.data.amount }}</td>                        
+                    {% endif %}
+                    <td>{{ item.data.date|date:"Y-m-d H:i" }}</td>
+                    {% if item.type == 'Transaction' %}
+                        <td>
+                            <div class="action-buttons">
+                                {% if item.data.seller != user_profile %}
+                                    <a href="{% url 'dashboard:make_review' item.data.transaction_id %}" class="btn review">
+                                        <i class="fas fa-eye"></i> Review
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'dashboard:print_transaction' item.data.transaction_id %}" class="btn print">
+                                    <i class="fas fa-print"></i> Print
+                                </a>
+                            </div>
+                        </td>
+                    {% elif item.type == 'Deposit' %}
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'dashboard:print_deposit' item.data.id %}" class="btn print">
+                                    <i class="fas fa-print"></i> Print
+                                </a>
+                            </div>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+             
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+{% endblock %}

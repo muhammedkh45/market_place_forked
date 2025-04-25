@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Transaction</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body onload="window.print()">
+    <h2>Deposit Summary</h2>
+    <table>
+        <tr><th>ID</th><td>D- {{ deposit.id }}</td></tr>
+        <tr><th>User</th><td>{{ deposit.user }}</td></tr>
+        <tr><th>Amount</th><td>{{ deposit.amount }}</td></tr>
+        <tr><th>Status</th><td>{{ deposit.status }}</td></tr>
+        <tr><th>Date</th><td>{{ deposit.date }}</td></tr>
+    </table>
+</body>
+</html>

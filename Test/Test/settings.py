@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
     'items.apps.ItemsConfig',
+    'deposit.apps.DepositConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
     'carts.apps.CartsConfig',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +143,4 @@ MESSAGE_TAGS = {
     message_constants.WARNING: 'warning',
     message_constants.ERROR: 'danger',
 }
+    
