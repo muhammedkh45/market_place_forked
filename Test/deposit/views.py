@@ -6,6 +6,7 @@ from .models import Deposit
 import uuid
 from datetime import datetime
 from django.shortcuts import render
+from core.models import UserProfile
 
 # Helper functions (can go in utils.py)
 def luhn_check(card_number: str) -> bool:
@@ -51,6 +52,12 @@ def process_payment(request):
             transaction_id=str(uuid.uuid4())
         )
         
+         # Get the user profile for the authenticated user
+        user_profile = UserProfile.objects.get(user=request.user)
+        
+        # Update the user's balance
+        user_profile.balance += deposit.amount  # Add the deposit amount to the current balance 
+        user_profile.save()  # Save the updated profile
 
         # Return success response in JSON format
         return Response({
