@@ -44,10 +44,13 @@ def process_payment(request):
             return Response({"error": "Card expired."}, status=status.HTTP_400_BAD_REQUEST)
 
         deposit = Deposit.objects.create(
+            user = request.user.profile,
             amount=data['deposit_amount'],
             status='successful',
+            created_at=datetime.now(),
             transaction_id=str(uuid.uuid4())
         )
+        
 
         # Return success response in JSON format
         return Response({
@@ -57,6 +60,7 @@ def process_payment(request):
             "amount": deposit.amount
         })
     
+        deposit.save()
     # If serializer is invalid, return the error messages
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #HTML form view

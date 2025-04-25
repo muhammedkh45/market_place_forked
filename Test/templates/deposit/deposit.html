@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="depositform-wrapper">

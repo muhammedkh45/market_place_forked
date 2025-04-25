@@ -6,5 +6,6 @@ app_name = 'dashboard'
 urlpatterns = [
     path('transaction-report/', views.transaction_report, name='transaction_report'),
     path('transaction/<int:id>/print/', views.print_transaction, name='print_transaction'),
+    path('deposit/<int:id>/print/', views.print_deposit, name='print_deposit'),
     path('transaction/<int:id>/make-review/', views.make_review, name='make_review'),
 ]

@@ -11,12 +11,12 @@
 <body onload="window.print()">
     <h2>Transaction Summary</h2>
     <table>
-        <tr><th>ID</th><td>{{ transaction.transaction_id }}</td></tr>
+        <tr><th>ID</th><td>T- {{ transaction.transaction_id }}</td></tr>
         <tr><th>Buyer</th><td>{{ transaction.buyer.user.username }}</td></tr>
         <tr><th>Seller</th><td>{{ transaction.seller.user.username }}</td></tr>
         <tr><th>Product</th><td>{{ transaction.product.name }}</td></tr>
         <tr><th>Total Price</th><td>{{ transaction.total_price }}</td></tr>
-        <tr><th>Status</th><td>{{ transaction.status }}</td></tr>
+        <tr><th>Type</th><td>{{ transaction.status }}</td></tr>
         <tr><th>Date</th><td>{{ transaction.date }}</td></tr>
     </table>
 </body>

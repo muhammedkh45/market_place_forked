@@ -4,7 +4,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f3f4f6;
     color: #111;
-    direction: rtl;
+    direction: ltr;
 }
 
 .wrapper {
@@ -18,7 +18,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #1e3a8a;
+    color: #000;
     margin-bottom: 30px;
     font-size: 28px;
 }
@@ -31,7 +31,7 @@ h1 {
 }
 
 .styled-table thead tr {
-    background-color: #1e3a8a;
+    background-color: #00dfc4;
     color: #ffffff;
     text-align: center;
 }
@@ -59,18 +59,18 @@ h1 {
     text-decoration: none;
     margin: 0 4px;
     display: inline-block;
-    color: white;
+    color: #000;
     cursor: pointer;
     border: none;
     transition: all 0.2s;
 }
 
 .review {
-    background-color: #2563eb;
+    background-color: #00dfc4;
 }
 
 .review:hover {
-    background-color: #1d4ed8;
+    background-color: #009f8d;
     transform: translateY(-1px);
 }
 
@@ -79,7 +79,7 @@ h1 {
 }
 
 .print:hover {
-    background-color: #059669;
+    background-color: #047350;
     transform: translateY(-1px);
 }
 
@@ -101,6 +101,27 @@ h1 {
 
 .action-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 8px;
+}
+
+.action-buttons .btn {
+    padding: 8px 12px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    background-color: #00dfc4; /* Example button color */
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.action-buttons .btn:hover {
+    background-color: #009f8d; /* Darker color on hover */
+}
+
+td .action-buttons {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
 }

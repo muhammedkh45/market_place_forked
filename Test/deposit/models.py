@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from core.models import UserProfile
 
 # this is temporary till you guys create a user class
 class UserBalance(models.Model):
@@ -36,7 +37,8 @@ class Deposit(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # For example, store amounts in dollars
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     transaction_id = models.CharField(max_length=255, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.CharField(max_length=255, default='hana')  # Placeholder for user, can be changed to ForeignKey later
     
     def __str__(self):
         return f"Deposit {self.transaction_id} - {self.status}"

@@ -1,14 +1,44 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Make Review</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
 </head>
 <body>
-    <h2>Review: {{ product.name }}</h2>
     <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+
+        <div class="star-rating-container">
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="5 stars">★</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 star">★</label>
+            </div>
+            <div class="star-rating-text">Select your rating</div>
+        </div>
+
+        <label for="comment">Your Review:</label>
+        <textarea id="comment" name="comment" required></textarea>
+
         <button type="submit">Submit Review</button>
     </form>
 </body>
 </html>
+{% endblock %}
