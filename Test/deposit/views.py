@@ -47,7 +47,7 @@ def process_payment(request):
             user = request.user.profile,
             amount=data['deposit_amount'],
             status='successful',
-            created_at=datetime.now(),
+            date=datetime.now(),
             transaction_id=str(uuid.uuid4())
         )
         
