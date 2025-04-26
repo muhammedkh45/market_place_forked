@@ -14,14 +14,16 @@ class LoginForm(AuthenticationForm):
     }))
 
 class SignupForm(UserCreationForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'placeholder': 'Your email address'"e.g. example@mail.com",
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+        
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'placeholder': 'Your email address'"e.g. example@mail.com",
+        'class': 'w-full py-4 px-6 rounded-xl'
+    }))
 
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)

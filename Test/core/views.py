@@ -22,10 +22,21 @@ def profile(request):
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             # Update User model fields
+
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
+            request.user.username = form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name']
             request.user.email = form.cleaned_data['email']
+            user_profile.phone = form.cleaned_data['phone'] 
+            user_profile.bio = form.cleaned_data['bio']
+            user_profile.address = form.cleaned_data['address']
+            
+            if form.cleaned_data.get('photo'):
+                user_profile.photo = form.cleaned_data['photo']
+
             request.user.save()
+            user_profile.save()
+ 
             
             # Save profile form
             profile = form.save(commit=False)
