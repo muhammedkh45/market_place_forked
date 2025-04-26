@@ -19,7 +19,7 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-        
+
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'placeholder': 'Your email address'"e.g. example@mail.com",
         'class': 'w-full py-4 px-6 rounded-xl'
@@ -111,9 +111,18 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control'
     }))
 
+    date_of_birth = forms.DateField(required=False, widget=forms.DateInput(
+         attrs={
+             'class': 'form-control',
+             'placeholder': 'Date of Birth YYYY-MM-DD',
+             'type': 'date'
+         },
+         format='%Y-%m-%d'
+    )) 
+
     class Meta:
         model = UserProfile
-        fields = ['photo', 'bio', 'phone', 'address']
+        fields = ['photo', 'bio', 'phone', 'address' , 'date_of_birth',]
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
