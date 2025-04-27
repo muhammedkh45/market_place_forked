@@ -12,9 +12,10 @@ class Transaction(models.Model):
     buyer = models.ForeignKey(UserProfile, related_name='transactions_bought', on_delete=models.CASCADE, null=True, blank=True)
     seller = models.ForeignKey(UserProfile, related_name='transactions_sold', on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Items, on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=1)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=TRANSACTION_TYPES, default='transaction')
     date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def _str_(self):
         return f"{self.transaction_id} - {self.status}"

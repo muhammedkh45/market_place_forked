@@ -72,10 +72,10 @@ def process_payment(request):
     if request.method == 'GET':
         user_profile = UserProfile.get_profile_by_user(user=request.user)
         orders = Order.objects.filter(buyer=user_profile)
+        
         total_price = sum(order.total_price for order in orders)
-        user_profile2 = UserProfile.get_profile_by_user(request.user)
 
-        if total_price > user_profile2.balance:
+        if total_price > user_profile.balance:
             messages.error(request, "Insufficient balance to complete the payment.")
             return redirect(request.META.get('HTTP_REFERER', '/'))
 

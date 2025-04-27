@@ -59,21 +59,20 @@ class Payment(models.Model):
                     for_sale=False
                 )
 
-            self.product = new_item
-            self.save()
+          
 
-            product1.quantity -= self.quantity
-            product1.save()
+           
 
-            from dashboard.models import Transaction
             Transaction.objects.create(
                 buyer=self.buyer,
                 seller=self.seller,
-                product=self.product,
+                product=new_item,
+                quantity=self.quantity,
                 total_price=self.total_price,
                 status='transaction'
             )
-
+            product1.quantity -= self.quantity
+            product1.save()
             Order.objects.filter(id=self.order_id).delete()
 
             self.is_successful = True
