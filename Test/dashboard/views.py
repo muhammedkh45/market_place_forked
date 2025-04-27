@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden, HttpResponse
 from .models import Transaction
 from deposit.models import Deposit
 from core.models import Review
 from django import forms
 from itertools import chain  # Import chain
+from django.contrib import messages
 from django.urls import reverse
 def transaction_report(request):
     if not request.user.is_authenticated:
@@ -65,12 +65,19 @@ def make_review(request, id):
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            review = form.save(commit=False)
-            review.item = product
-            review.user = user_profile
-            review.save()
-            return HttpResponse("Review submitted successfully!")
+            if not Review.objects.filter(user=user_profile, product=product).exists():
+                review = form.save(commit=False)
+                review.product = product
+                review.user = user_profile
+                review.save()
+                messages.success(request, "Review submitted successfully!")
+                return redirect(reverse('dashboard:transaction_report'))
+            else:
+                messages.error(request, "You have already submitted a review for this product.")
+                return redirect(reverse('dashboard:transaction_report'))
+
+        else:
+            messages.error(request, "Invalid form submission.")
     else:
         form = ReviewForm()
-
     return render(request, 'dashboard/make_review.html', {'form': form, 'product': product})
