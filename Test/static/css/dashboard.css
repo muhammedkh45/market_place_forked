@@ -8,7 +8,7 @@ body {
 }
 
 .wrapper {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 30px auto;
     padding: 25px;
     background-color: #fff;
@@ -124,4 +124,14 @@ td .action-buttons {
     text-align: right;
     display: flex;
     justify-content: flex-end;
+}
+
+.styled-table th:nth-child(1), /* Assuming the 'id' column is the first column */
+.styled-table td:nth-child(1) {
+    width: 150px; /* Adjust the width as needed */
+}
+
+.styled-table th:nth-child(9), /* Assuming the 'date' column is the second column */
+.styled-table td:nth-child(9) {
+    width: 180px; /* Adjust the width as needed */
 }

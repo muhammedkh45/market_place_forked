@@ -21,7 +21,7 @@
 </head>
 <body>
     <div class="wrapper">
-        <h1><i class="fas fa-file-invoice"></i> Transaction Report</h1>
+        <h1><i class="fas fa-file-invoice"></i> {{ user_profile }} Reports</h1>
 
         <table class="styled-table">
             <thead>
@@ -44,8 +44,8 @@
                     {% if item.type == 'Transaction' %}
                         <td>T-{{ item.data.transaction_id }}</td>
                         <td>{{ item.type }}</td>
-                        <td>{{ item.data.buyer.user.username }}'s Profile</td>
-                        <td>{{ item.data.seller.user.username }}'s Profile</td>
+                        <td>{{ item.data.buyer.user.username }}</td>
+                        <td>{{ item.data.seller.user.username }}</td>
                         <td>{{ item.data.product.name }}</td>
                         <td>{{ item.data.quantity }}</td>
                         <td>{{ item.data.product.price }}</td>
@@ -53,7 +53,7 @@
                         <td>{% localtime on %}{{ item.data.date|date:"Y-m-d H:i" }}{% endlocaltime %}</td>
                         <td>
                             <div class="action-buttons">
-                                {% if item.data.seller.user.username != user.user.username %}
+                                {% if item.data.seller.user.username != user_profile.user.username %}
                                     <a href="{% url 'dashboard:make_review' item.data.transaction_id %}" class="btn review">
                                         <i class="fas fa-eye"></i> Review
                                     </a>
