@@ -66,7 +66,7 @@ class Payment(models.Model):
             Transaction.objects.create(
                 buyer=self.buyer,
                 seller=self.seller,
-                product=new_item,
+                product=product1,
                 quantity=self.quantity,
                 total_price=self.total_price,
                 status='transaction'

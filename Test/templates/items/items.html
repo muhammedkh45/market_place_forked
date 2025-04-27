@@ -68,7 +68,7 @@
                                 <a href="{% url 'item' product.id %}">
                                     <img src="{{ product.image.url }}" alt="{{ product.name }}">
                                 </a>
-                                <h2>{{ product.name }}</h2>
+                                <h2>{{ product.name }},{{product.average_rating}}</h2>
                                 <p>Price: {{ product.price }}</p>
                                 <p>Available Stock: {{ product.quantity }}</p>
                                 <label for="quantity-{{ product.id }}">amount:</label>

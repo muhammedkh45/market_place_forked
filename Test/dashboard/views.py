@@ -58,18 +58,22 @@ class ReviewForm(forms.ModelForm):
         fields = ['rating', 'comment']
 
 def make_review(request, id):
-    transaction = get_object_or_404(Transaction, transaction_id=id)
-    product = transaction.product
+    transaction1 = get_object_or_404(Transaction, transaction_id=id)
+    print(transaction1)
+    product = transaction1.product
     user_profile = request.user.profile
 
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            if not Review.objects.filter(user=user_profile, product=product).exists():
+            if not Review.objects.filter(user=user_profile, product=product,transaction=transaction1).exists():
                 review = form.save(commit=False)
+                review.transaction = transaction1
                 review.product = product
                 review.user = user_profile
                 review.save()
+                product.average_rating = Review.get_average_rating(product)
+                product.save()
                 messages.success(request, "Review submitted successfully!")
                 return redirect(reverse('dashboard:transaction_report'))
             else:

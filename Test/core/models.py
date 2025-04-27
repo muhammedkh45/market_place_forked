@@ -59,16 +59,22 @@ class Review(models.Model):
         (4, '4 Stars'),
         (5, '5 Stars'),
     ]
-    
+    transaction = models.ForeignKey('dashboard.Transaction', on_delete=models.CASCADE, related_name='reviews', null=True, blank=True)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='reviews')
     product = models.ForeignKey('items.Items', on_delete=models.CASCADE, related_name='reviews')
     rating = models.IntegerField(choices=RATING_CHOICES)
-    comment = models.TextField()
+    comment = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('user', 'product')
+        unique_together = ('user', 'transaction', 'product')
 
     def __str__(self):
-        return f"Review by {self.user.user.username} for {self.product.name}"
+        return f"Review by {self.user.user.username} for {self.product.name}for transaction {self.transaction.transaction_id}"
+    @staticmethod
+    def get_average_rating(product):
+        reviews = Review.objects.filter(product=product)
+        if reviews.exists():
+            return sum(review.rating for review in reviews) / reviews.count()
+        return 0
