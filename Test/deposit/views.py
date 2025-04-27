@@ -8,6 +8,9 @@ from datetime import datetime
 from django.shortcuts import render
 from core.models import UserProfile
 
+def navbar_view(request):
+    return render(request, 'parts/navbarwithoutforms.html')
+
 # Helper functions (can go in utils.py)
 def luhn_check(card_number: str) -> bool:
     def digits_of(n):
@@ -45,7 +48,7 @@ def process_payment(request):
             return Response({"error": "Card expired."}, status=status.HTTP_400_BAD_REQUEST)
 
         deposit = Deposit.objects.create(
-            user = request.user.profile,
+            user = request.user.username,
             amount=data['deposit_amount'],
             status='successful',
             date=datetime.now(),

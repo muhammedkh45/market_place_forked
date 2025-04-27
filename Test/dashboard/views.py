@@ -21,7 +21,7 @@ def transaction_report(request):
         ).union(
             Transaction.objects.filter(seller=user_profile)
         ).order_by('-date')
-        deposits = Deposit.objects.filter(user=user_profile).order_by('-date') # Corrected to user
+        deposits = Deposit.objects.filter(user=user_profile.user.username).order_by('-date') # Corrected to user
 
     # Add a 'type' field to distinguish between models
     transactions_with_type = [

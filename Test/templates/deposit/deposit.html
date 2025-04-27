@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block navbar %}
+<div id="navbar-container">
     {% if user.is_authenticated %}
         {% include 'parts/navbarwithoutforms.html' %}
     {% else %}
         {% include 'parts/navbar.html' %}
     {% endif %}
+</div>
 {% endblock %}
 
 {% block content %}
@@ -101,6 +103,16 @@
 </style>
 
 <script>
+  function reloadNavbar() {
+    fetch("{% url 'your_view_that_renders_navbarwithoutforms' %}")  //changed
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('navbar-container').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Failed to reload navbar:', error);
+        });
+}
   // Get CSRF token from cookies
   function getCookie(name) {
     let cookieValue = null;
@@ -153,6 +165,7 @@
         <p>Transaction ID: ${result.transaction_id}</p>
         <p>Amount: $${result.amount}</p>
       `;
+      reloadNavbar()
     })
     .catch(error => {
       responseMessage.innerHTML = `<p class="error">❌ Request failed: ${error.message}</p>`;
