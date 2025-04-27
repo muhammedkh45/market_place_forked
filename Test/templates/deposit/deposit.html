@@ -136,6 +136,11 @@
   form.addEventListener('submit', function (event) {
     event.preventDefault();
 
+    // Disable the submit button
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = "Processing...";
+
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => data[key] = value);
@@ -169,7 +174,13 @@
     })
     .catch(error => {
       responseMessage.innerHTML = `<p class="error">❌ Request failed: ${error.message}</p>`;
+    })
+    .finally(() => {
+      // Re-enable the submit button
+      submitButton.disabled = false;
+      submitButton.textContent = "Submit Deposit";
+      form.reset();
     });
-  });
+});
 </script>
 {% endblock %}
