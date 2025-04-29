@@ -1,5 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-# Create your views here.
-def show(request):
-    return render(request,'inventory/inventory.html')
+from .models import Account  
+
+def account_page(request):
+    account = None  # default
+
+    if request.user.is_authenticated:
+        try:
+            account = Account.objects.get(user=request.user)
+        except Account.DoesNotExist:
+            account = None
+
+    return render(request, 'profile.html', {'account': account})
