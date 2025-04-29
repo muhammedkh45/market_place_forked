@@ -10,4 +10,42 @@ def item(request, item_id):
     return render(request, 'items/item.html', context)
 
 def items(request):
+    
     return render(request,'items/items.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
+def filter1(request):
+    query = request.GET.get('query', '')
+    filters = request.GET.getlist('filters')
+
+    # Get all categories
+    cat = Category.objects.all()
+
+    # Get all products
+    pro = Items.objects.filter(for_sale=True)
+
+    # Apply filters if a query is provided
+    if query:
+        if 'name' in filters:
+            pro = pro.filter(name__icontains=query)
+        if 'seller' in filters:
+            pro = pro.filter(owned_by__user__username__icontains=query)
+        if 'category' in filters:
+            pro = pro.filter(category__name__icontains=query)
+        else:
+            pro = pro.filter(
+                name__icontains=query
+            ) | pro.filter(
+                owned_by__user__username__icontains=query
+            ) | pro.filter(
+                category__name__icontains=query
+            )
+
+    # Filter out categories with no visible items
+    visible_categories = cat.filter(items__in=pro).distinct()
+
+    context = {
+        'cat': visible_categories,
+        'pro': pro,
+        'query': query,
+        'filters': filters,
+    }
+    return render(request, 'items/items.html', context)

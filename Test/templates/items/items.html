@@ -23,7 +23,7 @@
 
 <div class="main-container">
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar"style="margin-top: 105px;">
         <h3>Filter By</h3>
 
         <div class="filter-section">
@@ -50,11 +50,48 @@
 
     <!-- Main Content -->
     <div class="content">
-        <div class="search-bar">
-            <input type="text" name="query" placeholder="Search for items...">
-            <button type="submit">Search</button>
-            <button type="button">Filter</button>
-        </div>
+        <form method="get" action="{% url 'filter1' %}" style="position: relative;">
+            <div class="search-bar" style="position: relative; display: flex; gap: 8px;">
+                <input type="text" name="query" placeholder="Search for items..." id="search-input" value="{{ query }}">
+                <button type="submit">Search</button>
+            
+                <div style="position: relative;">
+                    <button type="button" onclick="toggleFilter()">Filter</button>
+            
+                    <div id="filter-options" style="
+                        display: none;
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        margin-top: 5px;
+                        padding: 10px;
+                        background-color: white;
+                        border: 1px solid #ccc;
+                        border-bottom: 5px solid #00c395;
+                        z-index: 100;
+                        border-radius: 5px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                        width: 170px; /* a bit wider if needed */
+                        min-height: 80px; /* make it taller */
+                        text-align: left;
+                        color: black;
+                        font-size: 16px;
+                    ">
+                        <label>
+                            <input type="checkbox" name="filters" value="name" {% if 'name' in filters %}checked{% endif %}> Item Name
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="filters" value="seller" {% if 'seller' in filters %}checked{% endif %}> Seller
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="filters" value="category" {% if 'category' in filters %}checked{% endif %}> Category
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+
 
         {% for category in cat %}
             <div class="category-box" data-category="{{ category.id }}">
@@ -110,6 +147,14 @@
             box.style.display = visibleItems.length > 0 ? 'block' : 'none';
         });
     });
+    function toggleFilter() {
+        var filterDiv = document.getElementById('filter-options');
+        if (filterDiv.style.display === 'none' || filterDiv.style.display === '') {
+            filterDiv.style.display = 'block';
+        } else {
+            filterDiv.style.display = 'none';
+        }
+    }
 </script>
 
 {% endblock content %}

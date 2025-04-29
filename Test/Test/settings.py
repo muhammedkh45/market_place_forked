@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'carts.apps.CartsConfig',
-    'dashboard',
+    'dashboard.apps.DashboardConfig',
+    'inventory.apps.InventoryConfig',
 ]
 
 MIDDLEWARE = [
