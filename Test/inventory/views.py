@@ -11,4 +11,4 @@ def account_page(request):
         except Account.DoesNotExist:
             account = None
 
-    return render(request, 'profile.html', {'account': account})
+    return render(request, 'inventory.html', {'account': account})
