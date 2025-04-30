@@ -1,24 +1,47 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Account</title>
-    <link rel="stylesheet" href="{% static 'profile.css' %}">
-</head>
-<body>
-    <div class="main-container">
-        <div class="content">
+{% block title %}Cart{% endblock %}
 
-            <!-- Cash Balance -->
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+<link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+    
+            <!-- Available Items -->
             <div class="category-box">
-                <h2>Current Cash Balance</h2>
-                {% if cash_balance is not None %}
-                    <p class="price">${{ cash_balance }}</p>
-                {% else %}
-                    <p class="price">$0.00</p>
-                {% endif %}
+                <h2>Items Available for Sale</h2>
+                    {% if available_items %}
+                        {% for item in available_items %}
+                        <div class="item-card">
+                            <div class="item-img">
+                                <a>
+                                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                </a>
+                            </div>
+                            <div class="item-details">
+                                <h3>{{ item.name }}</h3>
+                                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                <p><strong>Price:</strong> ${{ item.price }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No available items.</p>
+                    {% endif %}
             </div>
 
             <!-- Purchased Items -->
@@ -37,42 +60,7 @@
                     {% endif %}
                 </div>
             </div>
-
-            <!-- Sold Items -->
-            <div class="category-box">
-                <h2>Sold Items</h2>
-                <div class="items">
-                    {% if sold_items %}
-                        {% for item in sold_items %}
-                        <div class="item">
-                            <h2>{{ item.name }}</h2>
-                            <p class="price">${{ item.price }}</p>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>No sold items.</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Available Items -->
-            <div class="category-box">
-                <h2>Items Available for Sale</h2>
-                <div class="items">
-                    {% if available_items %}
-                        {% for item in available_items %}
-                        <div class="item">
-                            <h2>{{ item.name }}</h2>
-                            <p class="price">${{ item.price }}</p>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>No available items.</p>
-                    {% endif %}
-                </div>
-            </div>
-
         </div>
     </div>
-</body>
-</html>
+    {% endblock content %}
+
