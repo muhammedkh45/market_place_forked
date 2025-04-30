@@ -16,3 +16,6 @@ def account_page(request):
             available_items = None
 
     return render(request, 'inventory/inventory.html', {'available_items': available_items})
+def item_detail(request, id):
+    product = Items.objects.get(id=id)
+    return render(request, 'inventory/item_detail.html', {'product': product})

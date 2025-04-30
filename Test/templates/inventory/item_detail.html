@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+<link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+<div class="item-detail">
+    <div class="item-image">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    </div>
+    <div class="item-info">
+        <h1>{{ product.name }}</h1>
+        <p class="price">Price: ${{ product.price }}</p>
+        <p>Description: {{ product.description }}</p>
+        <p>Category: {{ product.category }}</p>
+        <p>Created At: {{ product.created_at }}</p>
+        <p>Available Quantity: {{ product.quantity }}</p>
+        <p>for Sale: {{ product.for_sale }}</p>
+        <div class="inv-actions">
+            <button type="submit" class="edit-btn">Edit</button>
+            <button type="submit" class="remove-btn">Remove</button>
+        </div>
+    </div>
+  
+</div>
+{% endblock content %}

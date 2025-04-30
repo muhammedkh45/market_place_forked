@@ -20,15 +20,23 @@
     </div>
 {% endif %}
 <link rel="stylesheet" href="{% static 'css/inventory.css' %}">
-    
+     
             <!-- Available Items -->
             <div class="category-box">
-                <h2>Items Available for Sale</h2>
+                <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                    Items Available for Sale
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" class="remove-btn">Advertise Items</button>
+                        <button type="button" class="edit-btn">Add category</button>
+                        <button type="button" class="edit-btn">Add Item</button>
+                    </div>
+                </h2>
                     {% if available_items %}
                         {% for item in available_items %}
+                        {% if  item.for_sale %}
                         <div class="item-card">
                             <div class="item-img">
-                                <a>
+                                <a href="{% url 'item_detail' item.id %}">
                                     <img src="{{ item.image.url }}" alt="{{ item.name }}">
                                 </a>
                             </div>
@@ -37,30 +45,42 @@
                                 <p><strong>Quantity:</strong> {{ item.quantity }}</p>
                                 <p><strong>Price:</strong> ${{ item.price }}</p>
                             </div>
+                            <div class="item-actions">
+                                <button type="submit" class="edit-btn">Edit Item</button>
+                                <button type="submit" class="remove-btn">Remove Item</button>
+                            </div>
                         </div>
+                        {% endif %}
                         {% endfor %}
-                    {% else %}
-                        <p>No available items.</p>
+                   
                     {% endif %}
             </div>
 
             <!-- Purchased Items -->
             <div class="category-box">
                 <h2>Purchased Items</h2>
-                <div class="items">
-                    {% if purchased_items %}
-                        {% for item in purchased_items %}
-                        <div class="item">
-                            <h2>{{ item.name }}</h2>
-                            <p class="price">${{ item.price }}</p>
+                    {% if available_items %}
+                        {% for item in available_items %}
+                        {% if not item.for_sale %}
+                        <div class="item-card">
+                            <div class="item-img">
+                                <a href="{% url 'item_detail' item.id %}">
+                                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                </a>
+                            </div>
+                            <div class="item-details">
+                                <h3>{{ item.name }}</h3>
+                                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                <p><strong>Price:</strong> ${{ item.price }}</p>
+                            </div>
+                            <div class="item-actions">
+                                <button type="submit" class="edit-btn">Edit Item</button>
+                                <button type="submit" class="remove-btn">Remove Item</button>
+                            </div>
                         </div>
+                        {% endif %}
                         {% endfor %}
-                    {% else %}
-                        <p>No purchased items.</p>
+                   
                     {% endif %}
-                </div>
             </div>
-        </div>
-    </div>
-    {% endblock content %}
-
+{% endblock %}
