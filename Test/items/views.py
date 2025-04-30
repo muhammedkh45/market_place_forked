@@ -6,6 +6,7 @@ def item(request, item_id):
     product = get_object_or_404(Items, id=item_id)
     context = {
         'product': product,
+        'reviews': product.reviews.all(),
     }
     return render(request, 'items/item.html', context)
 
