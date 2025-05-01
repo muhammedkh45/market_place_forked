@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Add New Item{% endblock %}
+
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+
+
+<div class="inventory-add-item-container">
+    <!-- Messages container -->
+    <div class="inventory-messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="inventory-alert inventory-alert-{{ message.tags }}">
+                    {{ message }}
+                    <span class="inventory-alert-close">&times;</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <h2 class="inventory-add-item-title">Add New Item</h2>
+    <form method="post" enctype="multipart/form-data" class="inventory-item-form">
+        {% csrf_token %}
+        
+        <div class="inventory-form-group">
+            <label for="name" class="inventory-form-label">Item Name:</label>
+            <input type="text" id="name" name="name" class="inventory-form-input" required>
+        </div>
+        
+
+        <div class="inventory-form-group">
+          <label for="quantity" class="inventory-form-label">Quantity:</label>
+          <input type="number" id="quantity" name="quantity" class="inventory-form-input" min="1" step="1" required>
+      </div>
+      
+
+        <div class="inventory-form-group">
+          <label for="category" class="inventory-form-label">Category:</label>
+          <input 
+              list="category-options"
+              id="category" 
+              name="category" 
+              class="inventory-form-select"
+              required
+              placeholder="Type or select a category"
+          >
+          <datalist id="category-options">
+              {% for cat in categories %}
+                  <option value="{{ cat.name }}">{{ cat.name }}</option>
+              {% endfor %}
+          </datalist>
+      </div>
+        
+        <div class="inventory-form-group">
+            <label for="price" class="inventory-form-label">Price ($):</label>
+            <input type="number" id="price" name="price" class="inventory-form-input" min="0" step="5" required>
+        </div>
+        
+        <div class="inventory-form-group">
+            <label for="description" class="inventory-form-label">Description:</label>
+            <textarea id="description" name="description" class="inventory-form-textarea" rows="4" ></textarea>
+        </div>
+        
+        <div class="inventory-form-group">
+            <label for="image" class="inventory-form-label">Item Image:</label>
+            <input type="file" id="image" name="image" class="inventory-form-file" accept="image/*">
+        </div>
+        
+        <div class="inventory-form-actions">
+            <button type="submit" class="edit-btn">Add Item</button>
+            <a href="{% url 'Inventory' %}" class="edit-btn">Cancel</a>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<style>
+ /* Inventory-specific link styling reset */
+.inventory-add-item-container a {
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Main container */
+.inventory-add-item-container {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+.inventory-add-item-title {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+/* Form styling */
+.inventory-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inventory-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inventory-form-label {
+  font-weight: 600;
+  color: #34495e;
+  font-size: 15px;
+}
+
+.inventory-form-input,
+.inventory-form-select,
+.inventory-form-textarea {
+  padding: 12px 15px;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border 0.3s ease;
+}
+
+.inventory-form-input:focus,
+.inventory-form-select:focus,
+.inventory-form-textarea:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.inventory-form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.inventory-form-file {
+  padding: 8px 0;
+}
+
+/* Buttons */
+.inventory-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.inventory-submit-btn {
+  background-color: #27ae60;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.inventory-submit-btn:hover {
+  background-color: #2ecc71;
+  transform: translateY(-2px);
+}
+
+.inventory-cancel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 25px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.inventory-cancel-link:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Messages/Alerts */
+.inventory-messages {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+}
+
+.inventory-alert {
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: inventorySlideIn 0.3s ease-out forwards;
+  opacity: 0;
+  transform: translateX(100%);
+  background-color: #c0392b;
+}
+
+@keyframes inventorySlideIn {
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+.inventory-alert-success {
+  background-color: #27ae60;
+}
+
+.inventory-alert-error {
+  background-color: #e74c3c;
+}
+
+.inventory-alert-close {
+  cursor: pointer;
+  margin-left: 15px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .inventory-add-item-container {
+      padding: 20px;
+      margin: 20px;
+  }
+  
+  .inventory-form-actions {
+      flex-direction: column;
+  }
+}
+</style>
+
+
+{% endblock %}

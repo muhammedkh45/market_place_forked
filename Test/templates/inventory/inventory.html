@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Cart{% endblock %}
+{% block title %}Inventory{% endblock %}
 
 {% block navbar %}
     {% if user.is_authenticated %}
@@ -27,8 +27,8 @@
                     Items Available for Sale
                     <div style="display: flex; gap: 10px;">
                         <button type="button" class="remove-btn">Advertise Items</button>
-                        <button type="button" class="edit-btn">Add category</button>
-                        <button type="button" class="edit-btn">Add Item</button>
+                        <button type="button" class="edit-btn inventory-add-category-btn" id="openModalBtn">Add category</button>
+                        <button type="button" class="edit-btn"><a class="addItem" href="{%url 'add_item' %}">Add item</a></button>
                     </div>
                 </h2>
                     {% if available_items %}
@@ -83,4 +83,114 @@
                    
                     {% endif %}
             </div>
+
+            <div id="addCategoryModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h3>Add New Category</h3>
+                  <form method="post" action="{% url 'add_category' %}">
+                    {% csrf_token %}
+                    <input type="text" name="name" placeholder="Category name" required>
+                    <button type="submit">Add</button>
+                  </form>
+                </div>
+              </div>
+            <style>
+    
+
+                /* Remove ALL default <a> tag styling for .addItem */
+                a.addItem {
+                    text-decoration: none !important;  /* Removes underline */
+                    color: inherit !important;        /* Inherits button text color */
+                    display: inline-block !important; /* Ensures proper button sizing */
+                    width: 100% !important;           /* Fills button space */
+                    height: 100% !important;          /* Fills button space */
+                    line-height: normal !important;   /* Resets line height */
+                    outline: none !important;         /* Removes focus outline */
+                    cursor: pointer !important;       /* Ensures pointer cursor */
+                    background: none !important;      /* Removes any background */
+                    border: none !important;          /* Removes borders */
+                    padding: 0 !important;            /* Removes padding */
+                    margin: 0 !important;             /* Removes margin */
+                    font: inherit !important;         /* Inherits button font styles */
+                }
+                
+                
+                /* Modal background */
+                .modal {
+                  display: none;
+                  position: fixed;
+                  z-index: 1000;
+                  left: 0;
+                  top: 0;
+                  width: 100%;
+                  height: 100%;
+                  overflow: auto;
+                  background-color: rgba(0, 0, 0, 0.4);
+                }
+                
+                /* Modal content box */
+                .modal-content {
+                  background-color: #ffffff;
+                  margin: 10% auto;
+                  padding: 30px 25px;
+                  border-radius: 12px;
+                  width: 350px;
+                  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+                  text-align: center;
+                  position: relative;
+                }
+                
+                /* Close button */
+                .modal .close {
+                  position: absolute;
+                  top: 12px;
+                  right: 18px;
+                  font-size: 22px;
+                  color: #888;
+                  cursor: pointer;
+                }
+                
+                /* Form input */
+                .modal-content input[type="text"] {
+                  width: 90%;
+                  padding: 10px 12px;
+                  margin: 20px 0;
+                  border: 1px solid #ccc;
+                  border-radius: 6px;
+                  font-size: 16px;
+                  outline: none;
+                }
+                
+                /* Add Category button inside modal */
+                .modal-content button[type="submit"] {
+                  background-color: #00e0d0;
+                  color: white;
+                  padding: 10px 22px;
+                  border: none;
+                  border-radius: 6px;
+                  font-size: 16px;
+                  cursor: pointer;
+                  transition: background-color 0.2s ease-in-out;
+                }
+                
+                .modal-content button[type="submit"]:hover {
+                  background-color: #03b8ac;
+                }
+                
+                
+                </style>
+                
+                
+                <script>
+                    const modal = document.getElementById("addCategoryModal");
+                    const btn = document.getElementById("openModalBtn");
+                    const span = document.querySelector(".modal .close");
+                  
+                    btn.onclick = () => modal.style.display = "block";
+                    span.onclick = () => modal.style.display = "none";
+                    window.onclick = (event) => {
+                      if (event.target == modal) modal.style.display = "none";
+                    }
+                  </script>
 {% endblock %}
