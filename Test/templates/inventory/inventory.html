@@ -46,8 +46,8 @@
                                 <p><strong>Price:</strong> ${{ item.price }}</p>
                             </div>
                             <div class="item-actions">
-                                <button type="submit" class="edit-btn">Edit Item</button>
-                                <button type="submit" class="remove-btn">Remove Item</button>
+                                <a href="{% url 'edit_item' item.id %}"><button type="submit" class="edit-btn">Edit Item</button></a>
+                                <a href= "{% url 'delete_item' item.id %}"><button type="submit" class="remove-btn">Remove Item</button></a>
                             </div>
                         </div>
                         {% endif %}
@@ -74,8 +74,8 @@
                                 <p><strong>Price:</strong> ${{ item.price }}</p>
                             </div>
                             <div class="item-actions">
-                                <button type="submit" class="edit-btn">Edit Item</button>
-                                <button type="submit" class="remove-btn">Remove Item</button>
+                                <a href="{% url 'edit_item' item.id %}"><button type="submit" class="edit-btn">Edit Item</button></a>
+                                <a href= "{% url 'delete_item' item.id %}"><button type="submit" class="remove-btn">Remove Item</button></a>
                             </div>
                         </div>
                         {% endif %}
