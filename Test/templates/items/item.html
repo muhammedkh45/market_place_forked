@@ -60,7 +60,7 @@
     <div class="reviews-container" style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px;">
         {% for review in reviews %}
             <div class="review-card" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                <h3 style="margin: 0;"> {{ review.user.user.username }}</h3>
+                <h3 style="margin: 0;"> {{ review.user.user.first_name }} {{ review.user.user.last_name }} </h3>
                 <p style="margin: 8px 0;">Rating: {{ review.rating }} <i class="fa fa-star" style="color: gold;"></i></p>
                 <p style="margin: 8px 0;">{{ review.comment }}</p>
                 <p style="font-size: 0.9rem; color: #666;">{{ review.created_at }}</p>
