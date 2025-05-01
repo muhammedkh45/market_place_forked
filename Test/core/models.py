@@ -37,7 +37,7 @@ class UserProfile(models.Model):
             return None
 
     def __str__(self):
-        return f"{self.user.username}'s Profile"
+        return f"{self.user.first_name + self.user.last_name}'s Profile"
     def getName(self):
         return self.user.username
 

@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="profile-title">
-            <h1>{{ user.username }}'s Profile</h1>
+            <h1>{{ user.first_name }} {{ user.last_name }}'s Profile</h1>
             <p class="member-since">Member since {{ user.date_joined|date:"F j, Y" }}</p>
             {% if profile.date_of_birth %}
                 <p class="user-age" style="font-size: 16px; color: #555; font-weight: bold; margin-top: 5px;">
