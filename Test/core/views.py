@@ -8,11 +8,17 @@ from .models import Review
 
 def index(request):
     request.session.flush()
-    return render(request, 'core/index.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
+    pro=Items.objects.all().filter(for_sale=True)
+    # Get all categories
+    visible_categories = Category.objects.all().filter(items__in=pro).distinct()
+    return render(request,'core/index.html',{'pro':pro,'cat':visible_categories})
 
 @login_required(login_url='login')
 def home(request):
-    return render(request,'items/items.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
+      pro=Items.objects.all().filter(for_sale=True)
+    # Get all categories
+      visible_categories = Category.objects.all().filter(items__in=pro).distinct()
+      return render(request,'items/items.html',{'pro':pro,'cat':visible_categories})
 
 @login_required(login_url='login')
 def profile(request):

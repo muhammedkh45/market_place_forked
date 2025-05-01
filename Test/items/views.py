@@ -11,8 +11,10 @@ def item(request, item_id):
     return render(request, 'items/item.html', context)
 
 def items(request):
-    
-    return render(request,'items/items.html',{'pro':Items.objects.all(),'cat':Category.objects.all()})
+    pro=Items.objects.all().filter(for_sale=True)
+    # Get all categories
+    visible_categories = Category.objects.all().filter(items__in=pro).distinct()
+    return render(request,'items/items.html',{'pro':pro,'cat':visible_categories})
 def filter1(request):
     query = request.GET.get('query', '')
     filters = request.GET.getlist('filters')
