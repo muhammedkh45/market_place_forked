@@ -18,7 +18,7 @@ class Order(models.Model):
 
 class Payment(models.Model):
     payment_date = models.DateTimeField(auto_now_add=True)
-    is_successful = models.BooleanField(default=False)
+    is_successful = models.BooleanField(default=True)
     buyer = models.ForeignKey(UserProfile, related_name='payment_buyer', on_delete=models.CASCADE, default=1)
     seller = models.ForeignKey(UserProfile, related_name='payment_seller', on_delete=models.CASCADE, default=1)
     product = models.ForeignKey(Items, on_delete=models.CASCADE, related_name='payment_product', default=1)
