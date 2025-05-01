@@ -12,21 +12,372 @@
 {% endblock %}
 
 {% block content %}
-{% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <div class="alert {{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    </div>
-{% endif %}
-<link rel="stylesheet" href="{% static 'css/edit_item.css' %}">
-<h2>Edit Item: {{ item.name }}</h2>
+<div class="edit-item-container">
+    {% if messages %}
+        <div class="edit-messages">
+            {% for message in messages %}
+                <div class="edit-alert edit-alert-{{ message.tags }}">
+                    {{ message }}
+                    <span class="edit-alert-close">&times;</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-<form method = "POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+    <h2 class="edit-item-title">Edit Item: {{ item.name }}</h2>
 
-<a href="{% url 'item_detail' item.id %}">Back to Item Details</a>
+    <form method="POST" enctype="multipart/form-data" class="edit-item-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        
+        <div class="edit-form-group">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+            {{ form.category.errors }}
+        </div>
+        
+        <div class="edit-form-group">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        
+        <div class="edit-form-group">
+            {{ form.price.label_tag }}
+            {{ form.price }}
+            {{ form.price.errors }}
+        </div>
+        
+        <div class="edit-form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        
+        <div class="edit-form-group">
+            {{ form.image.label_tag }}
+            <div class="image-upload-container">
+                <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class="edit-form-file">
+                {% if form.image.value %}
+                    <a href="{{ form.image.value.url }}" class="current-image-link">{{ form.image.value.name }}</a>
+                {% endif %}
+            </div>
+            {{ form.image.errors }}
+        </div>
+        
+        <div class="edit-form-group">
+            {{ form.quantity.label_tag }}
+            {{ form.quantity }}
+            {{ form.quantity.errors }}
+        </div>
+        
+        <div class="edit-form-group checkbox-group">
+            {{ form.for_sale.label_tag }}
+            <label class="edit-checkbox-label">
+                {{ form.for_sale }}
+                <span class="edit-checkbox-custom"></span>
+            </label>
+            {{ form.for_sale.errors }}
+        </div>
+        
+        <div class="edit-form-actions">
+            <button type="submit" class="edit-submit-btn">Save Changes</button>
+            <a href="{% url 'item_detail' item.id %}" class="edit-cancel-btn">Back to Item Details</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .edit-item-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e0e0e0;
+    }
+
+    .edit-item-title {
+        color: #111111;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .edit-item-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: #00e0d0;
+    }
+
+    .edit-item-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .edit-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .edit-form-group label {
+        color: #333333;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .edit-form-group input:not([type="checkbox"]),
+    .edit-form-group select,
+    .edit-form-group textarea {
+        padding: 12px 15px;
+        border: 1px solid #dddddd;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #ffffff;
+    }
+
+    .edit-form-group input:focus:not([type="checkbox"]),
+    .edit-form-group select:focus,
+    .edit-form-group textarea:focus {
+        outline: none;
+        border-color: #00e0d0;
+        box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+    }
+
+    .edit-form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .edit-form-file {
+        padding: 10px;
+        border: 1px dashed #cccccc;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .edit-form-file:hover {
+        border-color: #00e0d0;
+        background-color: #f0fdfb;
+    }
+
+    .edit-form-file:focus {
+        outline: none;
+        border-color: #00e0d0;
+        box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+    }
+
+    .current-image-link {
+        display: inline-block;
+        margin-top: 8px;
+        color: #00a896;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .current-image-link:hover {
+        color: #008573;
+        text-decoration: underline;
+    }
+
+    .checkbox-group {
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .edit-checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+        user-select: none;
+    }
+
+    .edit-checkbox-label input {
+        opacity: 0;
+        position: absolute;
+    }
+
+    .edit-checkbox-custom {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border: 2px solid #dddddd;
+        border-radius: 4px;
+        margin-right: 10px;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+
+    .edit-checkbox-label:hover .edit-checkbox-custom {
+        border-color: #00e0d0;
+    }
+
+    .edit-checkbox-label input:checked ~ .edit-checkbox-custom {
+        background-color: #00e0d0;
+        border-color: #00e0d0;
+    }
+
+    .edit-checkbox-custom::after {
+        content: '';
+        position: absolute;
+        display: none;
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .edit-checkbox-label input:checked ~ .edit-checkbox-custom::after {
+        display: block;
+    }
+
+    .edit-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .edit-submit-btn {
+        padding: 12px 25px;
+        background-color: #00e0d0;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 224, 208, 0.2);
+    }
+
+    .edit-submit-btn:hover {
+        background-color: #00c9ba;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 224, 208, 0.3);
+    }
+
+    .edit-cancel-btn {
+        padding: 12px 25px;
+        background-color: #111111;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(17, 17, 17, 0.2);
+    }
+
+    .edit-cancel-btn:hover {
+        background-color: #333333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
+    }
+
+    /* Alert messages */
+    .edit-messages {
+        margin-bottom: 20px;
+    }
+
+    .edit-alert {
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .edit-alert::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 5px;
+        height: 100%;
+    }
+
+    .edit-alert-success {
+        background-color: #00a896;
+    }
+
+    .edit-alert-error {
+        background-color: #e63946;
+    }
+
+    .edit-alert-info {
+        background-color: #00b4d8;
+    }
+
+    .edit-alert-warning {
+        background-color: #ff9e00;
+    }
+
+    .edit-alert-close {
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: bold;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+    }
+
+    .edit-alert-close:hover {
+        opacity: 1;
+    }
+
+    /* Error messages */
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0;
+        color: #e63946;
+        font-size: 0.85rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .edit-item-container {
+            padding: 20px;
+            margin: 20px 15px;
+        }
+        
+        .edit-form-actions {
+            flex-direction: column;
+        }
+        
+        .edit-submit-btn,
+        .edit-cancel-btn {
+            width: 100%;
+        }
+        
+        .checkbox-group {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
 {% endblock %}

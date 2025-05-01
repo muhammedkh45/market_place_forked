@@ -90,6 +90,18 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Last Name'
     }))
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Old Password'
+    }))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'New Password'
+    }))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Confirm New Password'
+    }))
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'User Name'

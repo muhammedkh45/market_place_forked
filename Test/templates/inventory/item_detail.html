@@ -33,8 +33,13 @@
         <p>Available Quantity: {{ product.quantity }}</p>
         <p>for Sale: {{ product.for_sale }}</p>
         <div class="inv-actions">
+        <div>
+            <p></p>
+        </div>
+        <div>
             <a href="{% url 'edit_item' product.id %}"><button type="submit" class="edit-btn">Edit</button></a>
             <a href= "{% url 'delete_item' product.id %}"><button type="submit" class="remove-btn">Remove</button></a>
+        </div>
         </div>
     </div>
   

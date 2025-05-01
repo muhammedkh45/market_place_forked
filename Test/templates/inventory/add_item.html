@@ -15,39 +15,37 @@
 {% block content %}
 
 
-<link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+<link rel="stylesheet" href="{% static 'css/add_item.css' %}">
 
 
 <div class="inventory-add-item-container">
-    <!-- Messages container -->
-    <div class="inventory-messages">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="inventory-alert inventory-alert-{{ message.tags }}">
-                    {{ message }}
-                    <span class="inventory-alert-close">&times;</span>
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
+  <!-- Messages container -->
+  <div class="inventory-messages">
+      {% if messages %}
+          {% for message in messages %}
+              <div class="inventory-alert inventory-alert-{{ message.tags }}">
+                  {{ message }}
+                  <span class="inventory-alert-close">&times;</span>
+              </div>
+          {% endfor %}
+      {% endif %}
+  </div>
 
-    <h2 class="inventory-add-item-title">Add New Item</h2>
-    <form method="post" enctype="multipart/form-data" class="inventory-item-form">
-        {% csrf_token %}
-        
-        <div class="inventory-form-group">
-            <label for="name" class="inventory-form-label">Item Name:</label>
-            <input type="text" id="name" name="name" class="inventory-form-input" required>
-        </div>
-        
-
-        <div class="inventory-form-group">
+  <h2 class="inventory-add-item-title">Add New Item</h2>
+  <form method="post" enctype="multipart/form-data" class="inventory-item-form">
+      {% csrf_token %}
+      
+      <div class="inventory-form-group">
+          <label for="name" class="inventory-form-label">Item Name:</label>
+          <input type="text" id="name" name="name" class="inventory-form-input" required>
+      </div>
+      
+      <div class="inventory-form-group">
           <label for="quantity" class="inventory-form-label">Quantity:</label>
           <input type="number" id="quantity" name="quantity" class="inventory-form-input" min="1" step="1" required>
       </div>
       
-          
-        <div class="inventory-form-group">
+      <div class="inventory-form-group">
           <label for="category" class="inventory-form-label">Category:</label>
           <input 
               list="category-options"
@@ -68,205 +66,232 @@
               {% endif %}
           </datalist>
       </div>
-        
-        <div class="inventory-form-group">
-            <label for="price" class="inventory-form-label">Price ($):</label>
-            <input type="number" id="price" name="price" class="inventory-form-input" min="0" step="5" required>
-        </div>
-        
-        <div class="inventory-form-group">
-            <label for="description" class="inventory-form-label">Description:</label>
-            <textarea id="description" name="description" class="inventory-form-textarea" rows="4" ></textarea>
-        </div>
-        
-        <div class="inventory-form-group">
-            <label for="image" class="inventory-form-label">Item Image:</label>
-            <input type="file" id="image" name="image" class="inventory-form-file" accept="image/*">
-        </div>
-        
-        <div class="inventory-form-actions">
-            <button type="submit" class="edit-btn">Add Item</button>
-            <a href="{% url 'Inventory' %}" class="edit-btn">Cancel</a>
-        </div>
-    </form>
+      
+      <div class="inventory-form-group">
+          <label for="price" class="inventory-form-label">Price ($):</label>
+          <input type="number" id="price" name="price" class="inventory-form-input" min="0" step="5" required>
+      </div>
+      
+      <div class="inventory-form-group">
+          <label for="description" class="inventory-form-label">Description:</label>
+          <textarea id="description" name="description" class="inventory-form-textarea" rows="4"></textarea>
+      </div>
+      
+      <div class="inventory-form-group">
+          <label for="image" class="inventory-form-label">Item Image:</label>
+          <input type="file" id="image" name="image" class="inventory-form-file" accept="image/*">
+      </div>
+      
+      <div class="inventory-form-actions">
+          <button type="submit" class="inventory-submit-btn">Add Item</button>
+          <a href="{% url 'Inventory' %}" class="inventory-cancel-btn">Cancel</a>
+      </div>
+  </form>
 </div>
 
-
-
-
-
 <style>
- /* Inventory-specific link styling reset */
-.inventory-add-item-container a {
-  text-decoration: none;
-  color: inherit;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-/* Main container */
-.inventory-add-item-container {
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-/* Title */
-.inventory-add-item-title {
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 28px;
-}
-
-/* Form styling */
-.inventory-item-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.inventory-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.inventory-form-label {
-  font-weight: 600;
-  color: #34495e;
-  font-size: 15px;
-}
-
-.inventory-form-input,
-.inventory-form-select,
-.inventory-form-textarea {
-  padding: 12px 15px;
-  border: 1px solid #dfe6e9;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: border 0.3s ease;
-}
-
-.inventory-form-input:focus,
-.inventory-form-select:focus,
-.inventory-form-textarea:focus {
-  border-color: #3498db;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-.inventory-form-textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-.inventory-form-file {
-  padding: 8px 0;
-}
-
-/* Buttons */
-.inventory-form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.inventory-submit-btn {
-  background-color: #27ae60;
-  color: white;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.inventory-submit-btn:hover {
-  background-color: #2ecc71;
-  transform: translateY(-2px);
-}
-
-.inventory-cancel-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 25px;
-  background-color: #e74c3c;
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-.inventory-cancel-link:hover {
-  background-color: #c0392b;
-  transform: translateY(-2px);
-}
-
-/* Messages/Alerts */
-.inventory-messages {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 350px;
-}
-
-.inventory-alert {
-  padding: 15px 20px;
-  border-radius: 8px;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  animation: inventorySlideIn 0.3s ease-out forwards;
-  opacity: 0;
-  transform: translateX(100%);
-  background-color: #c0392b;
-}
-
-@keyframes inventorySlideIn {
-  to {
-      opacity: 1;
-      transform: translateX(0);
-  }
-}
-
-.inventory-alert-success {
-  background-color: #27ae60;
-}
-
-.inventory-alert-error {
-  background-color: #e74c3c;
-}
-
-.inventory-alert-close {
-  cursor: pointer;
-  margin-left: 15px;
-  font-size: 20px;
-  line-height: 1;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
   .inventory-add-item-container {
-      padding: 20px;
-      margin: 20px;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e0e0e0;
   }
-  
-  .inventory-form-actions {
+
+  .inventory-add-item-title {
+      color: #111111;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 10px;
+  }
+
+  .inventory-add-item-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: #00e0d0;
+  }
+
+  .inventory-item-form {
+      display: flex;
       flex-direction: column;
+      gap: 20px;
   }
-}
+
+  .inventory-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  }
+
+  .inventory-form-label {
+      color: #333333;
+      font-weight: 600;
+      font-size: 0.95rem;
+  }
+
+  .inventory-form-input,
+  .inventory-form-select,
+  .inventory-form-textarea {
+      padding: 12px 15px;
+      border: 1px solid #dddddd;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      background-color: #ffffff;
+  }
+
+  .inventory-form-input:focus,
+  .inventory-form-select:focus,
+  .inventory-form-textarea:focus {
+      outline: none;
+      border-color: #00e0d0;
+      box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+  }
+
+  .inventory-form-textarea {
+      resize: vertical;
+      min-height: 100px;
+  }
+
+  .inventory-form-file {
+      padding: 10px;
+      border: 1px dashed #cccccc;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      transition: all 0.3s ease;
+  }
+
+  .inventory-form-file:hover {
+      border-color: #00e0d0;
+      background-color: #f0fdfb;
+  }
+
+  .inventory-form-file:focus {
+      outline: none;
+      border-color: #00e0d0;
+      box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+  }
+
+  .inventory-form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 20px;
+  }
+
+  .inventory-submit-btn {
+      padding: 12px 25px;
+      background-color: #00e0d0;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 224, 208, 0.2);
+  }
+
+  .inventory-submit-btn:hover {
+      background-color: #00c9ba;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 224, 208, 0.3);
+  }
+
+  .inventory-cancel-btn {
+      padding: 12px 25px;
+      background-color: #111111;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(17, 17, 17, 0.2);
+  }
+
+  .inventory-cancel-btn:hover {
+      background-color: #333333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
+  }
+
+  /* Alert messages */
+  .inventory-alert {
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+  }
+
+  .inventory-alert::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 5px;
+      height: 100%;
+  }
+
+  .inventory-alert-success {
+      background-color: #00a896;
+  }
+
+  .inventory-alert-error {
+      background-color: #e63946;
+  }
+
+  .inventory-alert-info {
+      background-color: #00b4d8;
+  }
+
+  .inventory-alert-warning {
+      background-color: #ff9e00;
+  }
+
+  .inventory-alert-close {
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+  }
+
+  .inventory-alert-close:hover {
+      opacity: 1;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+      .inventory-add-item-container {
+          padding: 20px;
+          margin: 20px 15px;
+      }
+      
+      .inventory-form-actions {
+          flex-direction: column;
+      }
+      
+      .inventory-submit-btn,
+      .inventory-cancel-btn {
+          width: 100%;
+      }
+  }
 </style>
 
 

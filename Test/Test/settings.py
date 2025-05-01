@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'carts.apps.CartsConfig',
     'dashboard.apps.DashboardConfig',
     'inventory.apps.InventoryConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -11,100 +11,187 @@
 {% endblock %}
 
 {% block content %}
-<div class="depositform-wrapper">
-  <h2>💳 Mock Deposit</h2>
-  <form id="depositForm" method="post">
-    {% csrf_token %} <!-- 🔐 CSRF token -->
+<div class="deposit-form-container">
+  <h2 class="deposit-form-title">💳 Mock Deposit</h2>
+  <form id="depositForm" method="post" class="deposit-form">
+    {% csrf_token %}
 
-    <div class="form-group">
-      <label>Card Number</label>
-      <input type="text" name="card_number" maxlength="16" required />
+    <div class="deposit-form-group">
+      <label class="deposit-form-label">Card Number</label>
+      <input type="text" name="card_number" maxlength="16" required 
+             class="deposit-form-input" placeholder="1234 5678 9012 3456" />
     </div>
 
-    <div class="form-group">
-      <label>Expiration Month (MM)</label>
-      <input type="text" name="expiration_month" maxlength="2" required />
+    <div class="deposit-card-details">
+      <div class="deposit-form-group">
+        <label class="deposit-form-label">Expiration Month</label>
+        <input type="text" name="expiration_month" maxlength="2" required 
+           class="deposit-form-input" placeholder="MM" style="width: 133px;" />
+      </div>
+
+      <div class="deposit-form-group">
+        <label class="deposit-form-label">Expiration Year</label>
+        <input type="text" name="expiration_year" maxlength="4" required 
+           class="deposit-form-input" placeholder="YYYY" style="width: 133px;" />
+      </div>
+
+      <div class="deposit-form-group">
+        <label class="deposit-form-label">CVC</label>
+        <input type="text" name="cvc" maxlength="4" required 
+           class="deposit-form-input" placeholder="CVC" style="width: 133px;" />
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Expiration Year (YYYY)</label>
-      <input type="text" name="expiration_year" maxlength="4" required />
+    <div class="deposit-form-group">
+      <label class="deposit-form-label">Deposit Amount ($)</label>
+      <input type="number" name="deposit_amount" step="0.01" required 
+             class="deposit-form-input" placeholder="0.00" />
     </div>
 
-    <div class="form-group">
-      <label>CVC</label>
-      <input type="text" name="cvc" maxlength="4" required />
+    <div class="deposit-form-actions">
+      <button type="submit" class="deposit-submit-btn">Submit Deposit</button>
     </div>
-
-    <div class="form-group">
-      <label>Deposit Amount ($)</label>
-      <input type="number" name="deposit_amount" step="0.01" required />
-    </div>
-
-    <button type="submit">Submit Deposit</button>
   </form>
 
-  <div id="responseMessage"></div>
+  <div id="responseMessage" class="deposit-response-message"></div>
 </div>
 
 <style>
-  .depositform-wrapper {
-    max-width: 500px;
-    margin: 40px auto;
-    padding: 25px;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
-  }
+    .deposit-form-container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e0e0e0;
+    }
 
-  .form-group {
-    margin-bottom: 15px;
-  }
+    .deposit-form-title {
+        color: #111111;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+        position: relative;
+        padding-bottom: 10px;
+    }
 
-  label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-  }
+    .deposit-form-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: #00e0d0;
+    }
 
-  input {
-    padding: 8px;
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+    .deposit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
-  button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 12px;
-    width: 100%;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+    .deposit-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-  button:hover {
-    background-color: #218838;
-  }
+    .deposit-card-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 15px;
+    }
 
-  .success {
-    color: green;
-    margin-top: 10px;
-  }
+    .deposit-form-label {
+        color: #333333;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
 
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
+    .deposit-form-input {
+        padding: 12px 15px;
+        border: 1px solid #dddddd;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #ffffff;
+    }
+
+    .deposit-form-input:focus {
+        outline: none;
+        border-color: #00e0d0;
+        box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+    }
+
+    .deposit-form-actions {
+        margin-top: 20px;
+    }
+
+    .deposit-submit-btn {
+        width: 100%;
+        padding: 14px 25px;
+        background-color: #00e0d0;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 224, 208, 0.2);
+        font-size: 1rem;
+    }
+
+    .deposit-submit-btn:hover {
+        background-color: #00c9ba;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 224, 208, 0.3);
+    }
+
+    .deposit-submit-btn:disabled {
+        background-color: #cccccc;
+        transform: none;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    .deposit-response-message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .deposit-response-message.success {
+        background-color: rgba(0, 168, 150, 0.1);
+        color: #00a896;
+        border: 1px solid #00a896;
+    }
+
+    .deposit-response-message.error {
+        background-color: rgba(230, 57, 70, 0.1);
+        color: #e63946;
+        border: 1px solid #e63946;
+    }
+
+    @media (max-width: 600px) {
+        .deposit-form-container {
+            padding: 20px;
+            margin: 20px 15px;
+        }
+
+        .deposit-card-details {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
 <script>
   function reloadNavbar() {
-    fetch("{% url 'your_view_that_renders_navbarwithoutforms' %}")  //changed
+    fetch("{% url 'your_view_that_renders_navbarwithoutforms' %}")
         .then(response => response.text())
         .then(html => {
             document.getElementById('navbar-container').innerHTML = html;
@@ -112,7 +199,8 @@
         .catch(error => {
             console.error('Failed to reload navbar:', error);
         });
-}
+  }
+
   // Get CSRF token from cookies
   function getCookie(name) {
     let cookieValue = null;
@@ -166,14 +254,16 @@
       }
 
       responseMessage.innerHTML = `
-        <p class="success">✅ Deposit Successful!</p>
+        <p>✅ Deposit Successful!</p>
         <p>Transaction ID: ${result.transaction_id}</p>
         <p>Amount: $${result.amount}</p>
       `;
-      reloadNavbar()
+      responseMessage.className = 'deposit-response-message success';
+      reloadNavbar();
     })
     .catch(error => {
-      responseMessage.innerHTML = `<p class="error">❌ Request failed: ${error.message}</p>`;
+      responseMessage.innerHTML = `<p>❌ Request failed: ${error.message}</p>`;
+      responseMessage.className = 'deposit-response-message error';
     })
     .finally(() => {
       // Re-enable the submit button
@@ -181,6 +271,6 @@
       submitButton.textContent = "Submit Deposit";
       form.reset();
     });
-});
+  });
 </script>
 {% endblock %}

@@ -43,10 +43,7 @@
             {% endif %}
                 
             
-        </div>
-        <div class="profile-balance">
-            <h2>Balance</h2>
-            <p>${{ profile.balance }}</p>
+
         </div>
         
     </div>
@@ -55,12 +52,41 @@
         <form method="POST" enctype="multipart/form-data" class="profile-form">
             {% csrf_token %}
             <div class="form-section">
-                <h2>Personal Information</h2>
+                <h2>Login Information</h2>
                 <div class="form-group">
-                    <label for="id_last_name">User Name</label>
+                    <label for="id_last_name">UserName</label>
                     {{ form.username }}
                 </div>
-                
+                <div class="form-group">
+                    <label for="id_old_password">Old Password</label>
+                    {{ form.old_password }}
+                    {% if form.old_password.errors %}
+                        <div class="error-message">
+                            {{ form.old_password.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_password">New Password</label>
+                    {{ form.new_password }}
+                    {% if form.new_password.errors %}
+                        <div class="error-message">
+                            {{ form.new_password.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_confirm_password">Confirm New Password</label>
+                    {{ form.confirm_password }}
+                    {% if form.confirm_password.errors %}
+                        <div class="error-message">
+                            {{ form.confirm_password.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-section">
+            <h2>Personal Information</h2>
                 <div class="form-group">
                     <label for="id_first_name">First Name</label>
                     {{ form.first_name }}

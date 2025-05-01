@@ -25,45 +25,61 @@ def home(request):
 @login_required(login_url='login')
 def profile(request):
     user_profile = request.user.profile
-    
+
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
-            # Update User model fields
+            # Check if old password is correct
+            old_password = form.cleaned_data.get('old_password')
+            if old_password and not request.user.check_password(old_password):
+                messages.error(request, 'The old password is incorrect.')
+                return redirect('profile')
 
+            # Check if new password matches the confirmed password
+            new_password = form.cleaned_data.get('new_password')
+            confirm_password = form.cleaned_data.get('confirm_password')
+            if new_password and new_password != confirm_password:
+                messages.error(request, 'The new password and confirmation do not match.')
+                return redirect('profile')
+
+            # Update User model fields
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
             request.user.username = form.cleaned_data['username']
             request.user.email = form.cleaned_data['email']
-             # Handle phone field
+
+            # Handle phone field
             phone = form.cleaned_data['phone']
             user_profile.phone = phone if phone else None  # Set to None if empty
-            
+
             user_profile.bio = form.cleaned_data['bio']
             user_profile.address = form.cleaned_data['address']
-            
-            if form.cleaned_data['date_of_birth'] :
-                 user_profile.date_of_birth = form.cleaned_data['date_of_birth']
-                 user_profile.age = user_profile.get_age()
-            
+
+            if form.cleaned_data['date_of_birth']:
+                user_profile.date_of_birth = form.cleaned_data['date_of_birth']
+                user_profile.age = user_profile.get_age()
+
             if form.cleaned_data.get('photo'):
                 user_profile.photo = form.cleaned_data['photo']
 
+            # Update password if provided
+            if new_password:
+                request.user.set_password(new_password)
+
             request.user.save()
             user_profile.save()
- 
-            
+
             # Save profile form
             profile = form.save(commit=False)
             if 'photo' in request.FILES:
                 profile.photo = request.FILES['photo']
             profile.save()
-            
+
             messages.success(request, 'Your profile has been updated successfully!')
             return redirect('profile')
     else:
         form = UserProfileForm(instance=user_profile)
-    
+
     context = {
         'user': request.user,
         'profile': user_profile,

@@ -14,7 +14,7 @@ class ContactMessage(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/defult_image.png', blank=True)
+    photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/defult_image.png', blank=True, null=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
     phone = models.IntegerField(blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
