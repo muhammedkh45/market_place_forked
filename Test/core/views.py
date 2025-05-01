@@ -5,6 +5,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Review
+from core.models import UserProfile
+
 
 def index(request):
     request.session.flush()
@@ -15,7 +17,7 @@ def index(request):
 
 @login_required(login_url='login')
 def home(request):
-      pro=Items.objects.all().filter(for_sale=True)
+      pro = Items.objects.all().filter(for_sale=True).exclude(owned_by=UserProfile.get_profile_by_user(request.user))
     # Get all categories
       visible_categories = Category.objects.all().filter(items__in=pro).distinct()
       return render(request,'items/items.html',{'pro':pro,'cat':visible_categories})

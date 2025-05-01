@@ -79,6 +79,12 @@ def process_payment(request):
             messages.error(request, "Insufficient balance to complete the payment.")
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
+        for order in orders:
+            if order.quantity > order.product.quantity:
+             messages.error(request, f"Insufficient stock for product: {order.product.name}.")
+             return redirect(request.META.get('HTTP_REFERER', '/'))
+            
+
         if total_price == 0:
             messages.error(request, "No orders in the cart to process payment.")
             return redirect(request.META.get('HTTP_REFERER', '/'))

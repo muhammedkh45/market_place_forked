@@ -2,16 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from core.models import UserProfile
 
-# this is temporary till you guys create a user class
-class UserBalance(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-    def __str__(self):
-        return f"{self.user.username}'s balance: ${self.balance}"
 
 class PaymentCard(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=False)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,null=False)
     card_number = models.CharField(max_length=16,null=False)
     holder_name = models.CharField(max_length=100,null=False)
     expiry_date = models.CharField(max_length=5,null=False)  # MM/YY format TODO : learn to check this format soon plllzzzz
@@ -25,7 +19,7 @@ class PaymentCard(models.Model):
         return f"**** **** **** {self.card_number[-4:]}"
     
     def __str__(self):
-        return f"{self.user.username}'s card details"
+        return f"{self.user.user.username}'s card details"
 
 class Deposit(models.Model):
     STATUS_CHOICES = [
@@ -38,7 +32,7 @@ class Deposit(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     transaction_id = models.CharField(max_length=255, unique=True)
     date = models.DateTimeField(auto_now_add=True)
-    user = models.CharField(max_length=255, default='hana')  # Placeholder for user, can be changed to ForeignKey later
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,null=False)
     
     def __str__(self):
         return f"Deposit {self.transaction_id} - {self.status}"

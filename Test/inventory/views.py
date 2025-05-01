@@ -106,7 +106,7 @@ def add_item(request):
                 description=description,
                 image=image,
                 quantity=quantity,  # Default quantity set to 1
-                owned_by=UserProfile.get_profile_by_user(user=request.user), 
+                owned_by=UserProfile.get_profile_by_user(request.user)  # Assuming you have a method to get the user profile, 
             )
             
             messages.success(request, "Item added successfully!")
@@ -117,8 +117,7 @@ def add_item(request):
             return redirect('add_item')
     
     # GET request - show the form
-    categories = Category.objects.all()
-    return render(request, 'inventory/add_item.html', {'categories': categories})
+    return render(request, 'inventory/add_item.html', {'categories': Category.objects.all()})
 
 
 
@@ -127,8 +126,11 @@ def add_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         if name:
-            Category.objects.get_or_create(name=name.strip())
-            messages.success(request, "Category added successfully!")
+            category, created = Category.objects.get_or_create(name=name.strip())
+            if created:
+                messages.success(request, "Category added successfully!")
+            else:
+                messages.info(request, "Category already exists.")
         else:
             messages.error(request, "Category name cannot be empty.")
-    return redirect('Inventory') 
+    return redirect('Inventory')

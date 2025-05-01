@@ -48,7 +48,7 @@ def process_payment(request):
             return Response({"error": "Card expired."}, status=status.HTTP_400_BAD_REQUEST)
 
         deposit = Deposit.objects.create(
-            user = request.user.username,
+            user = UserProfile.get_profile_by_user(request.user),
             amount=data['deposit_amount'],
             status='successful',
             date=datetime.now(),

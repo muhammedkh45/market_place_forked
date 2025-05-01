@@ -6,12 +6,13 @@ from django import forms
 from itertools import chain  # Import chain
 from django.contrib import messages
 from django.urls import reverse
+from core.models import UserProfile
+
 def transaction_report(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
 
-    user_profile = request.user.profile
-
+    user_profile = UserProfile.get_profile_by_user(request.user)
     if request.user.is_staff:
         transactions = Transaction.objects.all().order_by('-date')
         deposits = Deposit.objects.all().order_by('-date')
@@ -21,7 +22,7 @@ def transaction_report(request):
         ).union(
             Transaction.objects.filter(seller=user_profile)
         ).order_by('-date')
-        deposits = Deposit.objects.filter(user=user_profile.user.username).order_by('-date') # Corrected to user
+        deposits = Deposit.objects.filter(user=user_profile).order_by('-date') # Corrected to user
 
     # Add a 'type' field to distinguish between models
     transactions_with_type = [
@@ -61,7 +62,7 @@ def make_review(request, id):
     transaction1 = get_object_or_404(Transaction, transaction_id=id)
     print(transaction1)
     product = transaction1.product
-    user_profile = request.user.profile
+    user_profile = UserProfile.get_profile_by_user(request.user)
 
     if request.method == "POST":
         form = ReviewForm(request.POST)

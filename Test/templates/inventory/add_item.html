@@ -46,7 +46,7 @@
           <input type="number" id="quantity" name="quantity" class="inventory-form-input" min="1" step="1" required>
       </div>
       
-
+          
         <div class="inventory-form-group">
           <label for="category" class="inventory-form-label">Category:</label>
           <input 
@@ -58,9 +58,14 @@
               placeholder="Type or select a category"
           >
           <datalist id="category-options">
-              {% for cat in categories %}
-                  <option value="{{ cat.name }}">{{ cat.name }}</option>
-              {% endfor %}
+              {% if categories %}
+                  {% for cat in categories %}
+                      print(cat.name)
+                      <option value="{{ cat.name }}">{{ cat.name }}</option>
+                  {% endfor %}
+              {% else %}
+                  <option value="" disabled>No categories available</option>
+              {% endif %}
           </datalist>
       </div>
         
