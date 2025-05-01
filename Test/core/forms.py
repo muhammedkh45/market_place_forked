@@ -90,6 +90,10 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Last Name'
     }))
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'User Name'
+    }))
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'placeholder': 'Email'
@@ -122,7 +126,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['photo', 'bio', 'phone', 'address' , 'date_of_birth',]
+        fields = ['photo', 'bio', 'phone', 'address' , 'date_of_birth','username']
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -130,3 +134,4 @@ class UserProfileForm(forms.ModelForm):
             self.fields['first_name'].initial = self.instance.user.first_name
             self.fields['last_name'].initial = self.instance.user.last_name
             self.fields['email'].initial = self.instance.user.email
+            self.fields['username'].initial = self.instance.user.username

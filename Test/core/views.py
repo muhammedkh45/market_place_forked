@@ -33,9 +33,12 @@ def profile(request):
 
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
-            # request.user.username = form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name']
+            request.user.username = form.cleaned_data['username']
             request.user.email = form.cleaned_data['email']
-            user_profile.phone = form.cleaned_data['phone'] 
+             # Handle phone field
+            phone = form.cleaned_data['phone']
+            user_profile.phone = phone if phone else None  # Set to None if empty
+            
             user_profile.bio = form.cleaned_data['bio']
             user_profile.address = form.cleaned_data['address']
             
