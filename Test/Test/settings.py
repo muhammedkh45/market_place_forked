@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'inventory.apps.InventoryConfig',
     'widget_tweaks',
+    'external_api.apps.ExternalApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,8 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'danger',
 }
     
+ #Create tokens for external stores manually or via admin panel.
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]}   

@@ -26,11 +26,13 @@
                 <h2 style="display: flex; justify-content: space-between; align-items: center;">
                     Items Available for Sale
                     <div style="display: flex; gap: 10px;">
-                        <button type="button" class="remove-btn">Advertise Items</button>
-                        <button type="button" class="edit-btn inventory-add-category-btn" id="openModalBtn">Add category</button>
+                        <button type="button" class="remove-btn" href="{%url 'external_api:test_interface' %}">Advertise Items</button>
+                        <button type="button" class="edit-btn inventory-add-category-btn" id="openAddModalBtn">Add category</button>
+                        <button type="button" class="edit-btn inventory-add-category-btn remove-category-btn" id="openRemoveModalBtn">Remove category</button>
                         <button type="button" class="edit-btn"><a class="addItem" href="{%url 'add_item' %}">Add item</a></button>
                     </div>
                 </h2>
+                <div class="scroll-container" style="max-height: 400px; overflow-y: auto;">
                     {% if available_items %}
                         {% for item in available_items %}
                         {% if  item.for_sale %}
@@ -54,11 +56,13 @@
                         {% endfor %}
                    
                     {% endif %}
+                </div>
             </div>
 
             <!-- Purchased Items -->
             <div class="category-box">
                 <h2>Purchased Items</h2>
+                <div class="scroll-container" style="max-height: 400px; overflow-y: auto;">
                     {% if available_items %}
                         {% for item in available_items %}
                         {% if not item.for_sale %}
@@ -82,6 +86,7 @@
                         {% endfor %}
                    
                     {% endif %}
+                </div>
             </div>
 
             <div id="addCategoryModal" class="modal">
@@ -95,9 +100,33 @@
                   </form>
                 </div>
               </div>
-            <style>
-    
 
+                    <!-- Remove Category Modal - Styled Like Add Modal -->
+            <div id="removeCategoryModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Remove Existing Category</h3>
+                    <form method="post" action="{% url 'remove_category' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="category-select">Select Category:</label>
+                            <select id="category-select" name="category_id" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% empty %}
+                                    <option disabled>No categories available</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn">Cancel</button>
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <style>
                 /* Remove ALL default <a> tag styling for .addItem */
                 a.addItem {
                     text-decoration: none !important;  /* Removes underline */
@@ -177,20 +206,116 @@
                 .modal-content button[type="submit"]:hover {
                   background-color: #03b8ac;
                 }
-                
-                
+                .form-group {
+                    margin-bottom: 20px;
+                }
+
+                .form-group label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: bold;
+                }
+
+                .form-group select,
+                .form-group input[type="text"] {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    font-size: 16px;
+                }
+
+                .form-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 10px;
+                    margin-top: 20px;
+                }
+              .cancel-btn {
+                    background-color: #95a5a6;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                .cancel-btn:hover {
+                    background-color: #7f8c8d;
+                }
+
+                /* Scroll Container Styling */
+                .scroll-container {
+                    display: grid;
+                    grid-template-rows: repeat(3, auto);
+                    gap: 15px;
+                    padding-right: 8px;
+                }
+
+                /* Custom Scrollbar */
+                .scroll-container::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .scroll-container::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 3px;
+                }
+                .scroll-container::-webkit-scrollbar-thumb {
+                    background: #00e0d0;
+                    border-radius: 3px;
+                }
+                .scroll-container::-webkit-scrollbar-thumb:hover {
+                    background: #03b8ac;
+                }
+
+                /* Ensure consistent card heights */
+                .item-card {
+                    min-height: 150px;
+                }
+
+                .remove-category-btn {
+                    background-color: black;
+                }
+                .remove-category-btn:hover {
+                    background-color: #333;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                }
                 </style>
                 
                 
                 <script>
-                    const modal = document.getElementById("addCategoryModal");
-                    const btn = document.getElementById("openModalBtn");
-                    const span = document.querySelector(".modal .close");
-                  
-                    btn.onclick = () => modal.style.display = "block";
-                    span.onclick = () => modal.style.display = "none";
-                    window.onclick = (event) => {
-                      if (event.target == modal) modal.style.display = "none";
-                    }
-                  </script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Get modal elements
+                        const addModal = document.getElementById('addCategoryModal');
+                        const removeModal = document.getElementById('removeCategoryModal');
+                        
+                        // Get buttons
+                        const addBtn = document.getElementById('openAddModalBtn');
+                        const removeBtn = document.getElementById('openRemoveModalBtn');
+                        const closeButtons = document.querySelectorAll('.close');
+                        const cancelBtn = document.querySelector('.cancel-btn');
+                
+                        // Open modals
+                        if (addBtn) addBtn.onclick = () => addModal.style.display = 'block';
+                        if (removeBtn) removeBtn.onclick = () => removeModal.style.display = 'block';
+                
+                        // Close modals
+                        closeButtons.forEach(btn => {
+                            btn.onclick = function() {
+                                addModal.style.display = 'none';
+                                removeModal.style.display = 'none';
+                            }
+                        });
+                
+                        // Cancel button
+                        if (cancelBtn) cancelBtn.onclick = () => removeModal.style.display = 'none';
+                
+                        // Close when clicking outside
+                        window.onclick = function(event) {
+                            if (event.target == addModal) addModal.style.display = 'none';
+                            if (event.target == removeModal) removeModal.style.display = 'none';
+                        }
+                    });
+                </script>
 {% endblock %}

@@ -46,26 +46,14 @@
       </div>
       
       <div class="inventory-form-group">
-          <label for="category" class="inventory-form-label">Category:</label>
-          <input 
-              list="category-options"
-              id="category" 
-              name="category" 
-              class="inventory-form-select"
-              required
-              placeholder="Type or select a category"
-          >
-          <datalist id="category-options">
-              {% if categories %}
-                  {% for cat in categories %}
-                      print(cat.name)
-                      <option value="{{ cat.name }}">{{ cat.name }}</option>
-                  {% endfor %}
-              {% else %}
-                  <option value="" disabled>No categories available</option>
-              {% endif %}
-          </datalist>
-      </div>
+        <label for="category" class="inventory-form-label">Category:</label>
+        <select id="category-options" name="category" class="inventory-form-select" placeholder="Type or select a category" required>
+            <option value="" disabled selected>Select a category</option>
+            {% for cat in categories %}
+                <option value="{{ cat.name }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
       
       <div class="inventory-form-group">
           <label for="price" class="inventory-form-label">Price ($):</label>
@@ -115,7 +103,7 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 80px;
+      width: 200px;
       height: 3px;
       background-color: #00e0d0;
   }
@@ -276,6 +264,42 @@
       opacity: 1;
   }
 
+  /* Style for datalist dropdown */
+.inventory-form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.inventory-form-select:focus {
+    border-color: #00e0d0;
+    outline: none;
+}
+
+/* Datalist dropdown options */
+datalist {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    border-top: none;
+    width: calc(100% - 2px); /* Match input width */
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+datalist option {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+datalist option:hover {
+    background-color: #f5f5f5;
+}
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
       .inventory-add-item-container {
@@ -294,5 +318,34 @@
   }
 </style>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryInput = document.getElementById('category');
+    if (categoryInput) {
+        // Show dropdown on focus
+        categoryInput.addEventListener('focus', function() {
+            this.setAttribute('list', 'category-options');
+        });
+        
+        // Prevent form submission if no valid category
+        document.querySelector('.inventory-item-form').addEventListener('submit', function(e) {
+            if (!isValidCategory()) {
+                e.preventDefault();
+                alert('Please select a valid category from the list');
+            }
+        });
+        
+        function isValidCategory() {
+            const options = document.getElementById('category-options').options;
+            const currentValue = categoryInput.value;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === currentValue) return true;
+            }
+            return false;
+        }
+    }
+});
+</script>
 
 {% endblock %}
