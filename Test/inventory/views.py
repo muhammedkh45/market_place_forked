@@ -12,17 +12,17 @@ from decimal import Decimal
 def account_page(request):
     user_profile = None
     available_items = None
-
+    categories = Category.objects.all()
     if request.user.is_authenticated:
         try:
             user_profile = UserProfile.objects.get(user=request.user)
-            available_items = Items.objects.filter(owned_by=user_profile)
+            available_items = Items.objects.filter(owned_by=user_profile).order_by('-created_at')
             
         except UserProfile.DoesNotExist:
             user_profile = None
             available_items = None
 
-    return render(request, 'inventory/inventory.html', {'available_items': available_items})
+    return render(request, 'inventory/inventory.html', {'available_items': available_items,'categories': categories})
 
 def item_detail(request, id):
     product = Items.objects.get(id=id)
@@ -128,9 +128,32 @@ def add_category(request):
         if name:
             category, created = Category.objects.get_or_create(name=name.strip())
             if created:
-                messages.success(request, "Category added successfully!")
+                messages.success(request, f"Category '{category.name}' added successfully!")
             else:
                 messages.info(request, "Category already exists.")
         else:
             messages.error(request, "Category name cannot be empty.")
+    return redirect('Inventory')
+
+
+@login_required
+def remove_category(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        try:
+            category = Category.objects.get(id=category_id)
+            
+            #Check if category is being used by any items
+            if category.items.exists():  # Assuming you have a related_name='items' on your Item model
+                messages.error(request, f"Cannot delete '{category.name}' - it contains items!")
+                return redirect('Inventory')  # Or your inventory page name
+            
+            category.delete()
+            messages.success(request, f"Category '{category.name}' deleted successfully!")
+        except Category.DoesNotExist:
+            messages.error(request, "Category not found!")
+        
+        return redirect('Inventory')  # Redirect back to inventory page
+    
+    # If not POST, redirect somewhere safe
     return redirect('Inventory')
