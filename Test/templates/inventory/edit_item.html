@@ -23,6 +23,7 @@
             {% endfor %}
         </div>
     {% endif %}
+    <link rel="stylesheet" href="{% static 'css/inventory.css' %}">
 
     <h2 class="edit-item-title">Edit Item: {{ item.name }}</h2>
 
@@ -78,6 +79,20 @@
                 <span class="edit-checkbox-custom"></span>
             </label>
             {{ form.for_sale.errors }}
+        </div>
+        <div class="edit-form-group checkbox-group">
+            {{ form.advertise.label_tag }}
+            <label class="edit-checkbox-label">
+                {{ form.advertise }}
+                <span class="edit-checkbox-custom"></span>
+            </label>
+            {{ form.advertise.errors }}
+        </div>
+
+        <div class="edit-form-group">
+            {{ form.quantity_advertise.label_tag }}
+            {{ form.quantity_advertise }}
+            {{ form.quantity_advertise.errors }}
         </div>
         
         <div class="edit-form-actions">

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from core.models import UserProfile
+from django.core.exceptions import ValidationError
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -27,6 +28,13 @@ class Items(models.Model):
         decimal_places=2,
         default=0.00,
     )
+    advertise = models.BooleanField(default=False)
+    quantity_advertise = models.IntegerField(default=0)
+
+    # def clean(self):
+    #     if self.quantity_advertise > self.quantity:
+    #         raise ValidationError("Quantity advertise cannot exceed the total quantity.")
+
     
 
 

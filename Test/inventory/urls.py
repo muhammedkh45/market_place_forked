@@ -9,5 +9,5 @@ urlpatterns = [
     path('add_item/',views.add_item, name='add_item'),
     path('add-category/', views.add_category, name='add_category'),
     path('remove-category/', views.remove_category, name='remove_category'),
-    path('external_api/', include('external_api.urls')),
+    #path('external_api/', include('external_api.urls')),
 ]
