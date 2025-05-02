@@ -89,6 +89,7 @@ def process_payment(request):
             messages.error(request, "No orders in the cart to process payment.")
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
+        
         for order in orders:
             payment = Payment.objects.create(
                 seller=order.seller,
