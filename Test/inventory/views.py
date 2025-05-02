@@ -39,9 +39,14 @@ def edit_item(request, id):
         if request.method == 'POST':
             form = ItemForm(request.POST,request.FILES, instance=item)
             if form.is_valid():
-                saved_item = form.save()
-                messages.success(request, 'Item updated successfully!')
-                return redirect('item_detail', id=saved_item.id)
+                quantity_advertise = form.cleaned_data.get('quantity_advertise')
+                if item.advertise and quantity_advertise > item.quantity:
+                    form.add_error('quantity', "Quantity to advertise cannot exceed the total quantity.")
+                    return render(request, 'inventory/edit_item.html', {'form': form, 'title': 'Edit Item', 'item': item})
+                else:
+                    saved_item = form.save()
+                    messages.success(request, 'Item updated successfully!')
+                    return redirect('item_detail', id=saved_item.id)
         else:
             form = ItemForm(instance=item)
 

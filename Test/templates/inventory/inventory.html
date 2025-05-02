@@ -26,7 +26,7 @@
                 <h2 style="display: flex; justify-content: space-between; align-items: center;">
                     Items Available for Sale
                     <div style="display: flex; gap: 10px;">
-                        <button type="button" class="remove-btn" href="{%url 'external_api:test_interface' %}">Advertise Items</button>
+                        {% comment %} <button type="button" class="remove-btn" >Advertise Items</button> {% endcomment %}
                         <button type="button" class="edit-btn inventory-add-category-btn" id="openAddModalBtn">Add category</button>
                         <button type="button" class="edit-btn inventory-add-category-btn remove-category-btn" id="openRemoveModalBtn">Remove category</button>
                         <button type="button" class="edit-btn"><a class="addItem" href="{%url 'add_item' %}">Add item</a></button>

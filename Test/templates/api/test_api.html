@@ -159,7 +159,7 @@
     }
 
     async function fetchProducts() {
-        try {
+        {% comment %} try {
             const response = await fetch(`${API_BASE}products/`, {
                 headers: { 'Authorization': `Token ${authToken}` }
             });
@@ -190,7 +190,27 @@
         } catch (error) {
             showMessage(error.message, true);
             console.error('Fetch error:', error);
-        }
+        } {% endcomment %}
+        fetch('/api/my-products/', {
+                headers: {
+                    'Accept': 'application/json'
+                },
+                credentials: 'include'  // Ensure cookies/session are sent
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Not logged in or server error");
+                return response.json();
+            })
+            .then(data => {
+                const list = document.getElementById('product-list');
+                list.innerHTML = '';
+                data.forEach(product => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `<strong>${product.name}</strong> - $${product.price} - Stock: ${product.stock}`;
+                    list.appendChild(item);
+                });
+            })
+            .catch(err => alert("Error: " + err));
     }
 
     async function submitOrder() {
@@ -243,6 +263,7 @@
             showMessage(error.message, true);
             console.error('Transaction error:', error);
         }
+    
     }
 
     function showMessage(message, isError = false) {
