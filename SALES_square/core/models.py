@@ -23,6 +23,7 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     age = models.PositiveIntegerField(blank=True, null=True , default=None)
     balance = models.PositiveIntegerField(default=1000)
+    
     def get_age(self):
         if self.date_of_birth:
             today = date.today()

@@ -381,7 +381,7 @@
                 <form method="get" action="{% url 'filter1' %}">
                     <input type="hidden" name="category" value="{{ category.id }}">
                     <div class="search-bar">
-                        <input type="text" name="q" placeholder="Search in {{ category.name }}..." id="search-input" value="{{ request.GET.q }}">
+                        <input type="text" name="query" placeholder="Search in {{ category.name }}..." id="search-input" value="{{ query }}">
                         <button type="submit">
                             <i class="fa fa-search"></i> Search
                         </button>
@@ -468,5 +468,13 @@
             document.getElementById('apply-filters').click();
         }
     });
+    function toggleFilter() {
+        var filterDiv = document.getElementById('filter-options');
+        if (filterDiv.style.display === 'none' || filterDiv.style.display === '') {
+            filterDiv.style.display = 'block';
+        } else {
+            filterDiv.style.display = 'none';
+        }
+    }
 </script>
 {% endblock content %}

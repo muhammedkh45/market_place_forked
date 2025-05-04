@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from .models import Category, Items
 
 def item(request, item_id):
@@ -18,22 +19,24 @@ def items(request):
 #will edit
 def filter1(request):
     query = request.GET.get('query', '')
-    category_id = request.GET.get('category_id')
+    category_id = request.GET.get('category')  # Use 'category' instead of 'category_id'
     category = get_object_or_404(Category, id=category_id)
 
-
-    # Get  products
-    products = Items.objects.filter(for_sale=True).filter(ame__icontains=query)
-
-   
-    
-
+    # Get products
+    products = Items.objects.filter(for_sale=True) & Items.objects.filter(category=category)
+    products = products.filter(
+        name__icontains=query
+    ) | products.filter(
+        Q(owned_by__user__first_name__icontains=query) | Q(owned_by__user__last_name__icontains=query)
+    )
 
     context = {
         'category': category,
-        'products': products
+        'products': products,
+        'query': query,
     }
-    return render(request, 'items/catagory_detail.html', context)
+    return render(request, 'items/category_detail.html', context)
+
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     products = Items.objects.filter(category=category, for_sale=True)

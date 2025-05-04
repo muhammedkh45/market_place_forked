@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from core.models import UserProfile
+from core.models import UserProfile  # Ensure this import is correct and the UserProfile model exists in core.models
 from django.core.exceptions import ValidationError
 
 class Category(models.Model):
@@ -19,7 +19,7 @@ class Items(models.Model):
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='photos/%y/%m/%d',default='default-product-image.jpg', blank=True, null=True)
     Available_Stock = models.BooleanField(default=True)
-    owned_by = models.ForeignKey('core.UserProfile', related_name='items', on_delete=models.CASCADE)
+    owned_by = models.ForeignKey(UserProfile, related_name='items', on_delete=models.CASCADE)  # Use the imported UserProfile model
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField(default=1)
     for_sale = models.BooleanField(default=True)

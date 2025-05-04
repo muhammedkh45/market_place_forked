@@ -180,17 +180,15 @@ def filter(request):
         if 'name' in filters:
             pro = pro.filter(name__icontains=query)
         if 'seller' in filters:
-          pro = pro.filter(
-          Q(owned_by__user__first_name__icontains=query) |
-          Q(owned_by__user__last_name__icontains=query)
-          )        
-          if 'category' in filters:
-              pro = pro.filter(category__name__icontains=query)
+            pro = pro.filter(Q(owned_by__user__first_name__icontains=query) | Q(owned_by__user__last_name__icontains=query))
+        
+        if 'category' in filters:
+            pro = pro.filter(category__name__icontains=query)
         else:
             pro = pro.filter(
                 name__icontains=query
             ) | pro.filter(
-                owned_by__user__username__icontains=query
+                Q(owned_by__user__first_name__icontains=query) | Q(owned_by__user__last_name__icontains=query)
             ) | pro.filter(
                 category__name__icontains=query
             )
@@ -208,7 +206,7 @@ def filter(request):
 # views.py
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from django.db.models import Avg,Count  # Add this import
+from django.db.models import Avg, Count, Q  # Add this import
 from .models import UserProfile
 
 def user_detail(request, user_id):
