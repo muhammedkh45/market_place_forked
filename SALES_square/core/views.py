@@ -145,6 +145,7 @@ def about(request):
     return render(request,'core/about.html', {})
 
 def contactUS(request):
+    
     return render(request,'core/contactus.html', {})
 
 def terms(request):

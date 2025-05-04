@@ -9,10 +9,10 @@
     <style>
         /* Profile Icon Styles */
         .navbar-profile-icon {
+            position: relative; /* Required for correct dropdown placement */
             display: inline-block;
             margin-left: 15px;
             cursor: pointer;
-            position: relative; /* Added for dropdown positioning */
         }
 
         .profile-icon {
@@ -34,9 +34,9 @@
         /* Improved Dropdown Menu */
         .dropdown-menu {
             position: absolute;
-            right: 0;
-            top: 100%; /* Positions directly below the profile icon */
-            margin-top: 10px; /* Small gap between icon and menu */
+            left: 0; /* Ensures alignment with profile icon */
+            top: 100%; /* Directly below the icon */
+            margin-top: 8px; /* Small gap */
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
