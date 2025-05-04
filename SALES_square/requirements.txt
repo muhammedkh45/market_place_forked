@@ -1,2 +1,7 @@
 Django>=3.2,<5.0
-psycopg2>=2.9
+psycopg2-binary>=2.9
+gunicorn
+whitenoise
+dj-database-url
+djangorestframework
+Pillow
