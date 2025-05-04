@@ -168,7 +168,7 @@ def contactus(request):
             )
             messages.success(request, "Your message has been sent successfully.")
 
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+    return render(request, 'core/contactus.html')
 
 def terms(request):
     return render(request,'core/terms.html', {})
@@ -188,27 +188,7 @@ def signup(request):
         'form': form
     })
 """
-def contactus(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
 
-        # Optional: validate
-        if not name or not email or not message:
-            messages.error(request, "All fields are required.")
-        elif '@' not in email or '.' not in email:
-            messages.error(request, "Please enter a valid email address.")
-        else:
-            # ✅ Create and save to the database
-            ContactMessage.objects.create(
-                name=name,
-                email=email,
-                message=message
-            )
-            messages.success(request, "Your message has been sent successfully.")
-
-    return redirect(request.META.get('HTTP_REFERER', '/'))
 """
 class CustomLoginView(auth_views.LoginView):
     template_name = 'core/login.html'
