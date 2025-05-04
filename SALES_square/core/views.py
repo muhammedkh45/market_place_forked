@@ -6,7 +6,61 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Review
 from core.models import UserProfile
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import AccountSignupSerializer,UserSerializer
+from django.contrib.auth import authenticate, login
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from django.contrib.auth import authenticate, login as django_login
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
+@api_view(['POST'])
+def login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        django_login(request._request, user)  # Use request._request for Django login
+        serializer = UserSerializer(user)
+        return Response({"message": "Login successful", "user": serializer.data}, status=200)
+    else:
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+def login_page(request):
+    return render(request, 'core/login.html')
+
+"""
+ if request.method == 'POST':
+        form = SignupForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('/login/')
+    else:
+        form = SignupForm()
+
+    return render(request, 'core/signup.html', {
+        'form': form
+    })
+"""
+class SignupView(APIView):
+    def post(self, request):
+        serializer = AccountSignupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Account created successfully'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def signup_page(request):
+    return render(request, 'core/signup.html')
 
 def index(request):
     request.session.flush()
@@ -95,7 +149,7 @@ def contactUS(request):
 
 def terms(request):
     return render(request,'core/terms.html', {})
-
+"""
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -110,7 +164,7 @@ def signup(request):
     return render(request, 'core/signup.html', {
         'form': form
     })
-
+"""
 def contactus(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
@@ -124,7 +178,7 @@ def contactus(request):
     return render(request, 'core/contactus.html', {
         'form': form
     })
-
+"""
 class CustomLoginView(auth_views.LoginView):
     template_name = 'core/login.html'
     authentication_form = LoginForm
@@ -138,7 +192,7 @@ class CustomLoginView(auth_views.LoginView):
         # If form is valid, redirect to the appropriate page
         messages.success(self.request, 'Welcome back!')
         return super().form_valid(form)
-
+"""
 def item(request, pk):
     item = get_object_or_404(Items, pk=pk)
     reviews = Review.objects.filter(item=item).order_by('-created_at')
