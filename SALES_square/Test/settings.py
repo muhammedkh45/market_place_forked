@@ -16,7 +16,7 @@ import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-CSRF_TRUSTED_ORIGINS= ["https://marketplace-production-ba97.up.railway.app/"]
+CSRF_TRUSTED_ORIGINS= ["https://marketplace-production-ba97.up.railway.app"]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
@@ -27,8 +27,8 @@ SESSION_COOKIE_SECURE = True
 SECRET_KEY = 'django-insecure-+cc7=5^@7#k$##3fc@m6q_9%x450vk#7mj5#__hz*&7q%jx@9p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get('DEBUG', 'False') == 'False'
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'False'
+# DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
