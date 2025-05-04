@@ -148,7 +148,7 @@ def profile(request):
 def about(request):
     return render(request,'core/about.html', {})
 
-def contactUS(request):
+def contactus(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -188,19 +188,7 @@ def signup(request):
         'form': form
     })
 """
-def contactus(request):
-    if request.method == 'POST':
-        form = ContactUsForm(request.POST)
 
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = ContactUsForm()
-
-    return render(request, 'core/contactus.html', {
-        'form': form
-    })
 """
 class CustomLoginView(auth_views.LoginView):
     template_name = 'core/login.html'
