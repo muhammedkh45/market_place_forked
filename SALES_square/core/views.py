@@ -21,6 +21,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .forms import ContactUsForm  # Make sure this is imported
+from .models import ContactMessage
+
 
 
 @api_view(['POST'])
@@ -148,16 +150,25 @@ def about(request):
 
 def contactUS(request):
     if request.method == 'POST':
-        form = ContactUsForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Your message has been sent successfully.")
-            return redirect(request.META.get('HTTP_REFERER', '/'))
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        # Optional: validate
+        if not name or not email or not message:
+            messages.error(request, "All fields are required.")
+        elif '@' not in email or '.' not in email:
+            messages.error(request, "Please enter a valid email address.")
         else:
-            messages.error(request, "There was an error with your submission. Please check the form.")
-    else:
-        form = ContactUsForm()
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+            # ✅ Create and save to the database
+            ContactMessage.objects.create(
+                name=name,
+                email=email,
+                message=message
+            )
+            messages.success(request, "Your message has been sent successfully.")
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def terms(request):
     return render(request,'core/terms.html', {})
