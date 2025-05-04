@@ -25,7 +25,8 @@ CSRF_TRUSTED_ORIGINS= ["https://marketplace-production-ba97.up.railway.app/"]
 SECRET_KEY = 'django-insecure-+cc7=5^@7#k$##3fc@m6q_9%x450vk#7mj5#__hz*&7q%jx@9p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'False'
+# DEBUG = os.environ.get('DEBUG', 'False') == 'False'
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
