@@ -152,13 +152,12 @@ def contactUS(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Your message has been sent successfully.")
-            return redirect('ContactUs')  # Prevent resubmission on refresh
+            return redirect(request.META.get('HTTP_REFERER', '/'))
         else:
             messages.error(request, "There was an error with your submission. Please check the form.")
     else:
         form = ContactUsForm()
-
-    return render(request, 'core/contactus.html', {'form': form})
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def terms(request):
     return render(request,'core/terms.html', {})
