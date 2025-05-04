@@ -2,33 +2,47 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from .models import ContactMessage, Review, UserProfile
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': 'Your username',
+        'placeholder': 'Username or Email',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'placeholder': "••••••••"
-    }))
-
-class SignupForm(UserCreationForm):
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
-
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'placeholder': 'Your email address'"e.g. example@mail.com",
+        'placeholder': '••••••••',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
 
+
+
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'e.g. example@mail.com',
+            'class': 'w-full py-4 px-6 rounded-xl'
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
+
         self.fields['username'].widget.attrs.update({
             'placeholder': "e.g. John Doe",
+            'class': 'w-full py-4 px-6 rounded-xl'
+        })
+        self.fields['first_name'].widget.attrs.update({
+            'placeholder': "First Name",
+            'class': 'w-full py-4 px-6 rounded-xl'
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'placeholder': "Last Name",
             'class': 'w-full py-4 px-6 rounded-xl'
         })
         self.fields['password1'].widget.attrs.update({
@@ -90,18 +104,28 @@ class UserProfileForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Last Name'
     }))
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={
+    old_password = forms.CharField(
+    required=False,
+    widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': 'Old Password'
-    }))
-    new_password = forms.CharField(widget=forms.PasswordInput(attrs={
+    })
+)
+    new_password = forms.CharField(
+    required=False,
+    widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': 'New Password'
-    }))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+    })
+    )
+    confirm_password = forms.CharField(
+    required=False,
+    widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': 'Confirm New Password'
-    }))
+    })
+    )
+
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'User Name'

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block title %}Add New Item{% endblock %}
 
 {% block navbar %}
@@ -13,339 +12,585 @@
 {% endblock %}
 
 {% block content %}
-
-
-<link rel="stylesheet" href="{% static 'css/add_item.css' %}">
-
-
-<div class="inventory-add-item-container">
-  <!-- Messages container -->
-  <div class="inventory-messages">
-      {% if messages %}
-          {% for message in messages %}
-              <div class="inventory-alert inventory-alert-{{ message.tags }}">
-                  {{ message }}
-                  <span class="inventory-alert-close">&times;</span>
-              </div>
-          {% endfor %}
-      {% endif %}
-  </div>
-
-  <h2 class="inventory-add-item-title">Add New Item</h2>
-  <form method="post" enctype="multipart/form-data" class="inventory-item-form">
-      {% csrf_token %}
-      
-      <div class="inventory-form-group">
-          <label for="name" class="inventory-form-label">Item Name:</label>
-          <input type="text" id="name" name="name" class="inventory-form-input" required>
-      </div>
-      
-      <div class="inventory-form-group">
-          <label for="quantity" class="inventory-form-label">Quantity:</label>
-          <input type="number" id="quantity" name="quantity" class="inventory-form-input" min="1" step="1" required>
-      </div>
-      
-      <div class="inventory-form-group">
-        <label for="category" class="inventory-form-label">Category:</label>
-        <select id="category-options" name="category" class="inventory-form-select" placeholder="Type or select a category" required>
-            <option value="" disabled selected>Select a category</option>
-            {% for cat in categories %}
-                <option value="{{ cat.name }}">{{ cat.name }}</option>
-            {% endfor %}
-        </select>
+<div class="edit-item-container">
+    {% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
     </div>
-      
-      <div class="inventory-form-group">
-          <label for="price" class="inventory-form-label">Price ($):</label>
-          <input type="number" id="price" name="price" class="inventory-form-input" min="0" step="5" required>
-      </div>
-      
-      <div class="inventory-form-group">
-          <label for="description" class="inventory-form-label">Description:</label>
-          <textarea id="description" name="description" class="inventory-form-textarea" rows="4"></textarea>
-      </div>
-      
-      <div class="inventory-form-group">
-          <label for="image" class="inventory-form-label">Item Image:</label>
-          <input type="file" id="image" name="image" class="inventory-form-file" accept="image/*">
-      </div>
-      
-      <div class="inventory-form-actions">
-          <button type="submit" class="inventory-submit-btn">Add Item</button>
-          <a href="{% url 'Inventory' %}" class="inventory-cancel-btn">Cancel</a>
-      </div>
-  </form>
+    {% endfor %}
+</div>
+{% endif %}
+
+    <h2 class="edit-item-title">Add New Item</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="edit-item-form" id="addItemForm">
+        {% csrf_token %}
+        
+        <div class="form-columns">
+            <div class="form-column">
+                <div class="edit-form-group">
+                    <label for="category" class="inventory-form-label">Category:</label>
+                    <select id="category-options" name="category" class="inventory-form-select" required>
+                        <option value="" disabled selected>Select a category</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.name }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="edit-form-group">
+                    <label for="name" class="inventory-form-label">Item Name:</label>
+                    <input type="text" id="name" name="name" class="inventory-form-input" required>
+                </div>
+                
+                <div class="edit-form-group">
+                    <label for="price" class="inventory-form-label">Price:</label>
+                    <div class="input-with-symbol">
+                        <span class="symbol">$</span>
+                        <input type="number" id="price" name="price" class="inventory-form-input" min="0" step="1" required>
+                    </div>
+                </div>
+                
+                <div class="edit-form-group">
+                    <label for="quantity" class="inventory-form-label">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" class="inventory-form-input" min="1" step="1" required>
+                </div>
+            </div>
+            
+            <div class="form-column">
+                <div class="edit-form-group">
+                    <div class="profile-photo-container">
+                        <div class="profile-photo">
+                            <div class="no-image">No image selected</div>
+                            <div class="photo-overlay">
+                                <label for="image" class="change-photo-btn">
+                                    Select Image
+                                </label>
+                            </div>
+                        </div>
+                        <input type="file" id="image" name="image" class="inventory-form-file" accept="image/*">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="edit-form-group">
+            <label for="description" class="inventory-form-label">Description:</label>
+            <textarea id="description" name="description" class="inventory-form-textarea" rows="4"></textarea>
+        </div>
+        
+       
+        
+        <div class="edit-form-actions">
+            <a href="{% url 'Inventory' %}" class="edit-cancel-btn">Cancel</a>
+            <button type="submit" class="edit-submit-btn">Add Item</button>
+
+        </div>
+    </form>
 </div>
 
 <style>
-  .inventory-add-item-container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 30px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e0e0e0;
-  }
-
-  .inventory-add-item-title {
-      color: #111111;
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 1.8rem;
-      position: relative;
-      padding-bottom: 10px;
-  }
-
-  .inventory-add-item-title::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 3px;
-      background-color: #00e0d0;
-  }
-
-  .inventory-item-form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-  }
-
-  .inventory-form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-  }
-
-  .inventory-form-label {
-      color: #333333;
-      font-weight: 600;
-      font-size: 0.95rem;
-  }
-
-  .inventory-form-input,
-  .inventory-form-select,
-  .inventory-form-textarea {
-      padding: 12px 15px;
-      border: 1px solid #dddddd;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      background-color: #ffffff;
-  }
-
-  .inventory-form-input:focus,
-  .inventory-form-select:focus,
-  .inventory-form-textarea:focus {
-      outline: none;
-      border-color: #00e0d0;
-      box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
-  }
-
-  .inventory-form-textarea {
-      resize: vertical;
-      min-height: 100px;
-  }
-
-  .inventory-form-file {
-      padding: 10px;
-      border: 1px dashed #cccccc;
-      border-radius: 6px;
-      background-color: #f9f9f9;
-      transition: all 0.3s ease;
-  }
-
-  .inventory-form-file:hover {
-      border-color: #00e0d0;
-      background-color: #f0fdfb;
-  }
-
-  .inventory-form-file:focus {
-      outline: none;
-      border-color: #00e0d0;
-      box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
-  }
-
-  .inventory-form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-      margin-top: 20px;
-  }
-
-  .inventory-submit-btn {
-      padding: 12px 25px;
-      background-color: #00e0d0;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0, 224, 208, 0.2);
-  }
-
-  .inventory-submit-btn:hover {
-      background-color: #00c9ba;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 224, 208, 0.3);
-  }
-
-  .inventory-cancel-btn {
-      padding: 12px 25px;
-      background-color: #111111;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(17, 17, 17, 0.2);
-  }
-
-  .inventory-cancel-btn:hover {
-      background-color: #333333;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
-  }
-
-  /* Alert messages */
-  .inventory-alert {
-      padding: 15px 20px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-  }
-
-  .inventory-alert::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 5px;
-      height: 100%;
-  }
-
-  .inventory-alert-success {
-      background-color: #00a896;
-  }
-
-  .inventory-alert-error {
-      background-color: #e63946;
-  }
-
-  .inventory-alert-info {
-      background-color: #00b4d8;
-  }
-
-  .inventory-alert-warning {
-      background-color: #ff9e00;
-  }
-
-  .inventory-alert-close {
-      cursor: pointer;
-      font-size: 1.2rem;
-      font-weight: bold;
-      opacity: 0.8;
-      transition: opacity 0.2s ease;
-  }
-
-  .inventory-alert-close:hover {
-      opacity: 1;
-  }
-
-  /* Style for datalist dropdown */
-.inventory-form-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
+/* Main Container */
+.edit-item-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
 }
 
-.inventory-form-select:focus {
-    border-color: #00e0d0;
-    outline: none;
+/* Title */
+.edit-item-title {
+    color: #111111;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    position: relative;
+    padding-bottom: 10px;
 }
-
-/* Datalist dropdown options */
-datalist {
+.edit-item-title::after {
+    content: '';
     position: absolute;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 0 0 4px 4px;
-    border-top: none;
-    width: calc(100% - 2px); /* Match input width */
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: #00e0d0;
 }
 
-datalist option {
-    padding: 8px 10px;
-    cursor: pointer;
+/* Form Layout */
+.edit-item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.form-columns {
+    display: flex;
+    gap: 30px;
+}
+.form-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-datalist option:hover {
+/* Form Groups */
+.edit-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.edit-form-group label {
+    color: #333333;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.edit-form-group input:not([type="checkbox"]),
+.edit-form-group select,
+.edit-form-group textarea {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+}
+.edit-form-group input:focus:not([type="checkbox"]),
+.edit-form-group select:focus,
+.edit-form-group textarea:focus {
+    outline: none;
+    border-color: #00e0d0;
+    box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+}
+.edit-form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Price Input */
+.input-with-symbol {
+    position: relative;
+}
+.input-with-symbol .symbol {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+.input-with-symbol input {
+    padding-left: 30px !important;
+}
+
+/* Image Upload */
+.profile-photo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+.profile-photo {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+}
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #f5f5f5;
+    color: #888;
+    font-style: italic;
+}
+.photo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.profile-photo:hover .photo-overlay {
+    opacity: 1;
+}
+.change-photo-btn {
+    color: white;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.profile-photo-container input[type="file"] {
+    display: none;
 }
 
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-      .inventory-add-item-container {
-          padding: 20px;
-          margin: 20px 15px;
-      }
-      
-      .inventory-form-actions {
-          flex-direction: column;
-      }
-      
-      .inventory-submit-btn,
-      .inventory-cancel-btn {
-          width: 100%;
-      }
-  }
+/* Checkbox Section */
+.checkbox-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+/* Checkbox Row */
+.checkbox-row {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 15px;
+}
+
+/* Quantity Advertise Field */
+#quantityAdvertiseGroup {
+    margin-top: 15px;
+}
+
+.quantity-advertise-label {
+    display: block;
+    color: #333333;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.quantity-input-container input {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 200px;
+}
+
+.quantity-input-container input:focus {
+    outline: none;
+    border-color: #00e0d0;
+    box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
+}
+
+/* Checkbox Groups */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.edit-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    gap: 8px;
+}
+
+.edit-checkbox-label input {
+    opacity: 0;
+    position: absolute;
+}
+
+.edit-checkbox-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #dddddd;
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.edit-checkbox-label:hover .edit-checkbox-custom {
+    border-color: #00e0d0;
+}
+
+.edit-checkbox-label input:checked ~ .edit-checkbox-custom {
+    background-color: #00e0d0;
+    border-color: #00e0d0;
+}
+
+.edit-checkbox-custom::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.edit-checkbox-label input:checked ~ .edit-checkbox-custom::after {
+    display: block;
+}
+
+.checkbox-text {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+/* Form Actions */
+.edit-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+.edit-submit-btn {
+    padding: 12px 25px;
+    background-color: #00e0d0;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 224, 208, 0.2);
+}
+.edit-submit-btn:hover {
+    background-color: #00c9ba;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 224, 208, 0.3);
+}
+.edit-cancel-btn {
+    padding: 12px 25px;
+    background-color: #111111;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(17, 17, 17, 0.2);
+}
+.edit-cancel-btn:hover {
+    background-color: #333333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
+}
+
+/* Messages */
+.edit-messages {
+    margin-bottom: 20px;
+}
+.edit-alert {
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.edit-alert-success {
+    background-color: #00a896;
+}
+.edit-alert-error {
+    background-color: #e63946;
+}
+.edit-alert-info {
+    background-color: #00b4d8;
+}
+.edit-alert-warning {
+    background-color: #ff9e00;
+}
+.edit-alert-close {
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+.edit-alert-close:hover {
+    opacity: 1;
+}
+
+/* Error Messages */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0;
+    color: #e63946;
+    font-size: 0.85rem;
+}
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edit-item-container {
+        padding: 20px;
+        margin: 20px 15px;
+    }
+    .form-columns {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .edit-form-actions {
+        flex-direction: column;
+    }
+    .edit-submit-btn,
+    .edit-cancel-btn {
+        width: 100%;
+    }
+    .checkbox-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .quantity-input-container input {
+        max-width: 100%;
+    }
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Animation for alerts */
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
 </style>
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const categoryInput = document.getElementById('category');
-    if (categoryInput) {
-        // Show dropdown on focus
-        categoryInput.addEventListener('focus', function() {
-            this.setAttribute('list', 'category-options');
-        });
-        
-        // Prevent form submission if no valid category
-        document.querySelector('.inventory-item-form').addEventListener('submit', function(e) {
-            if (!isValidCategory()) {
-                e.preventDefault();
-                alert('Please select a valid category from the list');
+    // Image preview functionality
+    const imageInput = document.getElementById('image');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const preview = document.querySelector('.profile-photo');
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.innerHTML = `
+                        <img src="${event.target.result}" alt="Preview">
+                        <div class="photo-overlay">
+                            <label for="image" class="change-photo-btn">
+                                Change Image
+                            </label>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
             }
         });
-        
-        function isValidCategory() {
-            const options = document.getElementById('category-options').options;
-            const currentValue = categoryInput.value;
-            for (let i = 0; i < options.length; i++) {
-                if (options[i].value === currentValue) return true;
-            }
-            return false;
-        }
     }
+
+    // Auto-dismiss alerts
+    const alerts = document.querySelectorAll('[data-auto-dismiss]');
+    alerts.forEach(alert => {
+        const timeout = parseInt(alert.getAttribute('data-auto-dismiss'));
+        setTimeout(() => {
+            alert.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => alert.remove(), 300);
+        }, timeout);
+    });
+
+    // Close alerts manually
+    document.querySelectorAll('.edit-alert-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            this.parentElement.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => this.parentElement.remove(), 300);
+        });
+    });
+
+    // Show/hide quantity_advertise based on advertise checkbox
+    const advertiseCheckbox = document.querySelector('input[name="advertise"]');
+    const quantityAdvertiseGroup = document.getElementById('quantityAdvertiseGroup');
+
+    if (advertiseCheckbox && quantityAdvertiseGroup) {
+        function toggleAdvertiseQuantity() {
+            quantityAdvertiseGroup.style.display = advertiseCheckbox.checked ? 'block' : 'none';
+        }
+
+        // Initial state
+        toggleAdvertiseQuantity();
+        
+        // Add event listener
+        advertiseCheckbox.addEventListener('change', toggleAdvertiseQuantity);
+    }
+
+    // Form validation
+    const form = document.getElementById('addItemForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Validate price is not negative
+            const priceInput = document.querySelector('input[name="price"]');
+            if (priceInput && parseFloat(priceInput.value) < 0) {
+                e.preventDefault();
+                alert('Price cannot be negative');
+                priceInput.focus();
+                return false;
+            }
+
+            // Validate quantity is at least 1
+            const quantityInput = document.querySelector('input[name="quantity"]');
+            if (quantityInput && parseInt(quantityInput.value) < 1) {
+                e.preventDefault();
+                alert('Quantity must be at least 1');
+                quantityInput.focus();
+                return false;
+            }
+
+            // Validate category is selected
+            const categorySelect = document.getElementById('category-options');
+            if (categorySelect && !categorySelect.value) {
+                e.preventDefault();
+                alert('Please select a category');
+                categorySelect.focus();
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    // Add fadeOut animation to stylesheet
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+    `;
+    document.head.appendChild(style);
 });
 </script>
-
 {% endblock %}

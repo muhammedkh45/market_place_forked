@@ -20,7 +20,7 @@ def home(request):
       pro = Items.objects.all().filter(for_sale=True).exclude(owned_by=UserProfile.get_profile_by_user(request.user))
     # Get all categories
       visible_categories = Category.objects.all().filter(items__in=pro).distinct()
-      return render(request,'items/items.html',{'pro':pro,'cat':visible_categories})
+      return render(request,'core/index.html',{'pro':pro,'cat':visible_categories})
 
 @login_required(login_url='login')
 def profile(request):
@@ -63,7 +63,7 @@ def profile(request):
                 user_profile.photo = form.cleaned_data['photo']
 
             # Update password if provided
-            if new_password:
+            if new_password and  request.user.check_password(old_password):
                 request.user.set_password(new_password)
 
             request.user.save()
@@ -130,8 +130,14 @@ class CustomLoginView(auth_views.LoginView):
     authentication_form = LoginForm
 
     def form_invalid(self, form):
+        # Custom error message for invalid credentials
         messages.error(self.request, 'Invalid username or password.')
         return super().form_invalid(form)
+    
+    def form_valid(self, form):
+        # If form is valid, redirect to the appropriate page
+        messages.success(self.request, 'Welcome back!')
+        return super().form_valid(form)
 
 def item(request, pk):
     item = get_object_or_404(Items, pk=pk)
@@ -158,7 +164,7 @@ def item(request, pk):
         'reviews': reviews,
         'form': form,
     }
-    return render(request, 'core/item.html', context)
+    return render(request, 'core/index.html', context)
 def filter(request):
     query = request.GET.get('query', '')
     filters = request.GET.getlist('filters')
@@ -174,9 +180,12 @@ def filter(request):
         if 'name' in filters:
             pro = pro.filter(name__icontains=query)
         if 'seller' in filters:
-            pro = pro.filter(owned_by__user__username__icontains=query)
-        if 'category' in filters:
-            pro = pro.filter(category__name__icontains=query)
+          pro = pro.filter(
+          Q(owned_by__user__first_name__icontains=query) |
+          Q(owned_by__user__last_name__icontains=query)
+          )        
+          if 'category' in filters:
+              pro = pro.filter(category__name__icontains=query)
         else:
             pro = pro.filter(
                 name__icontains=query
@@ -196,6 +205,41 @@ def filter(request):
         'filters': filters,
     }
     return render(request, 'core/index.html', context)
+# views.py
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+from django.db.models import Avg,Count  # Add this import
+from .models import UserProfile
+
+def user_detail(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    try:
+        profile = user.profile
+        # Only include products with rating > 0 in the calculation
+        rated_products = profile.items.filter(average_rating__gt=0)
+        
+        rating_info = rated_products.aggregate(
+            avg_rating=Avg('average_rating'),
+            rated_count=Count('id')
+        )
+        
+        avg_rating = rating_info['avg_rating'] or 0
+        rated_count = rating_info['rated_count']
+        total_products = profile.items.count()
+        
+    except UserProfile.DoesNotExist:
+        avg_rating = 0
+        rated_count = 0
+        total_products = 0
+    
+    context = {
+        'user_profile': profile,
+        'products': profile.items.all() if hasattr(user, 'profile') else [],
+        'avg_rating': avg_rating,
+        'rated_count': rated_count,
+        'total_products': total_products,
+    }
+    return render(request, 'core/user_detail.html', context)
 
 
 

@@ -14,41 +14,32 @@ def items(request):
     pro=Items.objects.all().filter(for_sale=True)
     # Get all categories
     visible_categories = Category.objects.all().filter(items__in=pro).distinct()
-    return render(request,'items/items.html',{'pro':pro,'cat':visible_categories})
+    return render(request,'core/index.html',{'pro':pro,'cat':visible_categories})
+#will edit
 def filter1(request):
     query = request.GET.get('query', '')
-    filters = request.GET.getlist('filters')
+    category_id = request.GET.get('category_id')
+    category = get_object_or_404(Category, id=category_id)
 
-    # Get all categories
-    cat = Category.objects.all()
 
-    # Get all products
-    pro = Items.objects.filter(for_sale=True)
+    # Get  products
+    products = Items.objects.filter(for_sale=True).filter(ame__icontains=query)
 
-    # Apply filters if a query is provided
-    if query:
-        if 'name' in filters:
-            pro = pro.filter(name__icontains=query)
-        if 'seller' in filters:
-            pro = pro.filter(owned_by__user__username__icontains=query)
-        if 'category' in filters:
-            pro = pro.filter(category__name__icontains=query)
-        else:
-            pro = pro.filter(
-                name__icontains=query
-            ) | pro.filter(
-                owned_by__user__username__icontains=query
-            ) | pro.filter(
-                category__name__icontains=query
-            )
+   
+    
 
-    # Filter out categories with no visible items
-    visible_categories = cat.filter(items__in=pro).distinct()
 
     context = {
-        'cat': visible_categories,
-        'pro': pro,
-        'query': query,
-        'filters': filters,
+        'category': category,
+        'products': products
     }
-    return render(request, 'items/items.html', context)
+    return render(request, 'items/catagory_detail.html', context)
+def category_detail(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    products = Items.objects.filter(category=category, for_sale=True)
+    
+    context = {
+        'category': category,
+        'products': products,
+    }
+    return render(request, 'items/category_detail.html', context)

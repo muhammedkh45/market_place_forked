@@ -7,7 +7,10 @@ from itertools import chain  # Import chain
 from django.contrib import messages
 from django.urls import reverse
 from core.models import UserProfile
+from django.contrib.auth.decorators import login_required
 
+
+@login_required(login_url='login')
 def transaction_report(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
@@ -44,11 +47,11 @@ def transaction_report(request):
         'user_profile': user_profile,
     })
 
-
+@login_required(login_url='login')
 def print_transaction(request, id):
     transaction = get_object_or_404(Transaction, transaction_id=id)
     return render(request, 'dashboard/print_transaction.html', {'transaction': transaction})
-
+@login_required(login_url='login')
 def print_deposit(request, id):
     deposit = get_object_or_404(Deposit, id=id)
     return render(request, 'dashboard/print_deposit.html', {'deposit': deposit})    
@@ -57,7 +60,7 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'comment']
-
+@login_required(login_url='login')
 def make_review(request, id):
     transaction1 = get_object_or_404(Transaction, transaction_id=id)
     print(transaction1)

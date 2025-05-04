@@ -7,6 +7,8 @@ import uuid
 from datetime import datetime
 from django.shortcuts import render
 from core.models import UserProfile
+from django.contrib.auth.decorators import login_required
+
 
 def navbar_view(request):
     return render(request, 'parts/navbarwithoutforms.html')
@@ -32,6 +34,7 @@ def is_card_expired(month: str, year: str) -> bool:
 
 # API view to handle the POST request
 @api_view(['POST'])
+@login_required(login_url='login')
 def process_payment(request):
     # Ensure request is in JSON format
     if not request.content_type == 'application/json':
@@ -74,5 +77,6 @@ def process_payment(request):
     # If serializer is invalid, return the error messages
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #HTML form view
+@login_required(login_url='login')
 def deposit_page(request):
     return render(request, 'deposit/deposit.html')

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Edit Item{% endblock %}
+{% block title %}Edit Item: {{ item.name }}{% endblock %}
 
 {% block navbar %}
     {% if user.is_authenticated %}
@@ -16,37 +16,70 @@
     {% if messages %}
         <div class="edit-messages">
             {% for message in messages %}
-                <div class="edit-alert edit-alert-{{ message.tags }}">
+                <div class="edit-alert edit-alert-{{ message.tags }}" data-auto-dismiss="5000">
                     {{ message }}
                     <span class="edit-alert-close">&times;</span>
                 </div>
             {% endfor %}
         </div>
     {% endif %}
-    <link rel="stylesheet" href="{% static 'css/inventory.css' %}">
 
-    <h2 class="edit-item-title">Edit Item: {{ item.name }}</h2>
+    <h2 class="edit-item-title">Edit Item: <span class="item-name">{{ item.name }}</span></h2>
 
-    <form method="POST" enctype="multipart/form-data" class="edit-item-form">
+    <form method="POST" enctype="multipart/form-data" class="edit-item-form" id="editItemForm">
         {% csrf_token %}
         {{ form.non_field_errors }}
         
-        <div class="edit-form-group">
-            {{ form.category.label_tag }}
-            {{ form.category }}
-            {{ form.category.errors }}
-        </div>
-        
-        <div class="edit-form-group">
-            {{ form.name.label_tag }}
-            {{ form.name }}
-            {{ form.name.errors }}
-        </div>
-        
-        <div class="edit-form-group">
-            {{ form.price.label_tag }}
-            {{ form.price }}
-            {{ form.price.errors }}
+        <div class="form-columns">
+            <div class="form-column">
+                <div class="edit-form-group">
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+                
+                <div class="edit-form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+                
+                <div class="edit-form-group">
+                    {{ form.price.label_tag }}
+                    <div class="input-with-symbol">
+                        <span class="symbol">$</span>
+                        {{ form.price }}
+                    </div>
+                    {{ form.price.errors }}
+                </div>
+                
+                <div class="edit-form-group">
+                    {{ form.quantity.label_tag }}
+                    {{ form.quantity }}
+                    {{ form.quantity.errors }}
+                </div>
+            </div>
+            
+            <div class="form-column">
+                <div class="edit-form-group">
+                    <div class="profile-photo-container">
+                        <div class="profile-photo">
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" alt="Current item image" id="currentImagePreview">
+                            {% else %}
+                                <div class="no-image">No image selected</div>
+                            {% endif %}
+                            <div class="photo-overlay">
+                                <label for="{{ form.image.id_for_label }}" class="change-photo-btn">
+                                    Change Image
+                                </label>
+                            </div>
+                        </div>
+                        {{ form.image }}
+                    </div>
+                    {{ form.image.errors }}
+                </div>
+            </div>
         </div>
         
         <div class="edit-form-group">
@@ -55,56 +88,69 @@
             {{ form.description.errors }}
         </div>
         
-        <div class="edit-form-group">
-            {{ form.image.label_tag }}
-            <div class="image-upload-container">
-                <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class="edit-form-file">
-                {% if form.image.value %}
-                    <a href="{{ form.image.value.url }}" class="current-image-link">{{ form.image.value.name }}</a>
-                {% endif %}
+        <div class="checkbox-section">
+            <div class="checkbox-row">
+                <div class="edit-form-group checkbox-group">
+                    <label class="edit-checkbox-label">
+                        {{ form.for_sale }}
+                        <span class="edit-checkbox-custom"></span>
+                        <span class="checkbox-text">{{ form.for_sale.label }}</span>
+                    </label>
+                    {{ form.for_sale.errors }}
+                </div>
+                
+                <div class="edit-form-group checkbox-group">
+                    <label class="edit-checkbox-label">
+                        {{ form.advertise }}
+                        <span class="edit-checkbox-custom"></span>
+                        <span class="checkbox-text">{{ form.advertise.label }}</span>
+                    </label>
+                    {{ form.advertise.errors }}
+                </div>
             </div>
-            {{ form.image.errors }}
+        
+            <!-- Restored quantity_advertise field with consistent styling -->
+            <div class="edit-form-group" id="quantityAdvertiseGroup">
+                <label for="{{ form.quantity_advertise.id_for_label }}" class="quantity-advertise-label">
+                    {{ form.quantity_advertise.label }}
+                </label>
+                <div class="quantity-input-container">
+                    {{ form.quantity_advertise }}
+                </div>
+                {{ form.quantity_advertise.errors }}
+            </div>
         </div>
         
-        <div class="edit-form-group">
-            {{ form.quantity.label_tag }}
-            {{ form.quantity }}
-            {{ form.quantity.errors }}
-        </div>
-        
-        <div class="edit-form-group checkbox-group">
-            {{ form.for_sale.label_tag }}
-            <label class="edit-checkbox-label">
-                {{ form.for_sale }}
-                <span class="edit-checkbox-custom"></span>
-            </label>
-            {{ form.for_sale.errors }}
-        </div>
-        <div class="edit-form-group checkbox-group">
-            {{ form.advertise.label_tag }}
-            <label class="edit-checkbox-label">
-                {{ form.advertise }}
-                <span class="edit-checkbox-custom"></span>
-            </label>
-            {{ form.advertise.errors }}
-        </div>
-
-        <div class="edit-form-group">
-            {{ form.quantity_advertise.label_tag }}
-            {{ form.quantity_advertise }}
-            {{ form.quantity_advertise.errors }}
-        </div>
         
         <div class="edit-form-actions">
+            <a href="{% url 'Inventory'  %}" class="edit-cancel-btn">Cancel</a>
+            <button type="button" class="edit-delete-btn" id="deleteItemBtn">Delete Item</button>
             <button type="submit" class="edit-submit-btn">Save Changes</button>
-            <a href="{% url 'item_detail' item.id %}" class="edit-cancel-btn">Back to Item Details</a>
+
         </div>
     </form>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete "{{ item.name }}"? This action cannot be undone.</p>
+        <form method="POST" action="{% url 'delete_item' item.id %}">
+            {% csrf_token %}
+            <div class="modal-actions">
+                <button type="button" class="modal-cancel-btn">Cancel</button>
+                <button type="submit" class="modal-delete-btn">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <style>
+    /* Main Container */
     .edit-item-container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 30px auto;
         padding: 30px;
         background-color: #ffffff;
@@ -113,6 +159,7 @@
         border: 1px solid #e0e0e0;
     }
 
+    /* Title */
     .edit-item-title {
         color: #111111;
         text-align: center;
@@ -121,7 +168,6 @@
         position: relative;
         padding-bottom: 10px;
     }
-
     .edit-item-title::after {
         content: '';
         position: absolute;
@@ -132,25 +178,38 @@
         height: 3px;
         background-color: #00e0d0;
     }
+    .item-name {
+        color: #00a896;
+    }
 
+    /* Form Layout */
     .edit-item-form {
         display: flex;
         flex-direction: column;
         gap: 20px;
     }
+    .form-columns {
+        display: flex;
+        gap: 30px;
+    }
+    .form-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
+    /* Form Groups */
     .edit-form-group {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
-
     .edit-form-group label {
         color: #333333;
         font-weight: 600;
         font-size: 0.95rem;
     }
-
     .edit-form-group input:not([type="checkbox"]),
     .edit-form-group select,
     .edit-form-group textarea {
@@ -161,7 +220,6 @@
         transition: all 0.3s ease;
         background-color: #ffffff;
     }
-
     .edit-form-group input:focus:not([type="checkbox"]),
     .edit-form-group select:focus,
     .edit-form-group textarea:focus {
@@ -169,49 +227,131 @@
         border-color: #00e0d0;
         box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
     }
-
     .edit-form-group textarea {
         resize: vertical;
-        min-height: 100px;
+        min-height: 120px;
     }
 
-    .edit-form-file {
-        padding: 10px;
-        border: 1px dashed #cccccc;
-        border-radius: 6px;
-        background-color: #f9f9f9;
-        transition: all 0.3s ease;
+    /* Price Input */
+    .input-with-symbol {
+        position: relative;
+    }
+    .input-with-symbol .symbol {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+    }
+    .input-with-symbol input {
+        padding-left: 30px !important;
+    }
+
+    /* Image Upload */
+    .profile-photo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15px;
+    }
+    .profile-photo {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+    }
+    .profile-photo img {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+        color: #888;
+        font-style: italic;
+    }
+    .photo-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .profile-photo:hover .photo-overlay {
+        opacity: 1;
+    }
+    .change-photo-btn {
+        color: white;
+        text-align: center;
+        display: block;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .profile-photo-container input[type="file"] {
+        display: none;
     }
 
-    .edit-form-file:hover {
-        border-color: #00e0d0;
-        background-color: #f0fdfb;
+    /* Checkbox Section */
+    .checkbox-section {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 10px 0;
     }
 
-    .edit-form-file:focus {
+    /* Checkbox Row */
+    .checkbox-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 15px;
+    }
+
+    /* Quantity Advertise Field */
+    #quantityAdvertiseGroup {
+        margin-top: 15px;
+    }
+    
+    .quantity-advertise-label {
+        display: block;
+        color: #333333;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+    }
+    
+    .quantity-input-container input {
+        padding: 12px 15px;
+        border: 1px solid #dddddd;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #ffffff;
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .quantity-input-container input:focus {
         outline: none;
         border-color: #00e0d0;
         box-shadow: 0 0 0 3px rgba(0, 224, 208, 0.15);
     }
 
-    .current-image-link {
-        display: inline-block;
-        margin-top: 8px;
-        color: #00a896;
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-
-    .current-image-link:hover {
-        color: #008573;
-        text-decoration: underline;
-    }
-
+    /* Checkbox Groups */
     .checkbox-group {
-        flex-direction: row;
+        display: flex;
         align-items: center;
-        gap: 15px;
+        margin: 0;
     }
 
     .edit-checkbox-label {
@@ -220,6 +360,7 @@
         cursor: pointer;
         position: relative;
         user-select: none;
+        gap: 8px;
     }
 
     .edit-checkbox-label input {
@@ -234,7 +375,6 @@
         background: white;
         border: 2px solid #dddddd;
         border-radius: 4px;
-        margin-right: 10px;
         position: relative;
         transition: all 0.2s ease;
     }
@@ -265,13 +405,31 @@
         display: block;
     }
 
+    .checkbox-text {
+        font-weight: 500;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .checkbox-row {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .quantity-input-container input {
+            max-width: 100%;
+        }
+    }
+
+    /* Form Actions */
     .edit-form-actions {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         gap: 15px;
         margin-top: 20px;
     }
-
     .edit-submit-btn {
         padding: 12px 25px;
         background-color: #00e0d0;
@@ -283,13 +441,11 @@
         transition: all 0.3s ease;
         box-shadow: 0 2px 8px rgba(0, 224, 208, 0.2);
     }
-
     .edit-submit-btn:hover {
         background-color: #00c9ba;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 224, 208, 0.3);
     }
-
     .edit-cancel-btn {
         padding: 12px 25px;
         background-color: #111111;
@@ -303,18 +459,32 @@
         text-align: center;
         box-shadow: 0 2px 8px rgba(17, 17, 17, 0.2);
     }
-
     .edit-cancel-btn:hover {
         background-color: #333333;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
     }
+    .edit-delete-btn {
+        padding: 12px 25px;
+        background-color: #e63946;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(230, 57, 70, 0.2);
+    }
+    .edit-delete-btn:hover {
+        background-color: #d62839;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+    }
 
-    /* Alert messages */
+    /* Messages */
     .edit-messages {
         margin-bottom: 20px;
     }
-
     .edit-alert {
         padding: 15px 20px;
         margin-bottom: 15px;
@@ -325,33 +495,24 @@
         align-items: center;
         position: relative;
         overflow: hidden;
+        animation: fadeIn 0.3s ease-out;
     }
-
-    .edit-alert::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 5px;
-        height: 100%;
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-
     .edit-alert-success {
         background-color: #00a896;
     }
-
     .edit-alert-error {
         background-color: #e63946;
     }
-
     .edit-alert-info {
         background-color: #00b4d8;
     }
-
     .edit-alert-warning {
         background-color: #ff9e00;
     }
-
     .edit-alert-close {
         cursor: pointer;
         font-size: 1.2rem;
@@ -359,12 +520,11 @@
         opacity: 0.8;
         transition: opacity 0.2s ease;
     }
-
     .edit-alert-close:hover {
         opacity: 1;
     }
 
-    /* Error messages */
+    /* Error Messages */
     .errorlist {
         list-style: none;
         padding: 0;
@@ -373,26 +533,232 @@
         font-size: 0.85rem;
     }
 
-    /* Responsive adjustments */
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 25px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+    .modal h3 {
+        margin-top: 0;
+        color: #333;
+    }
+    .modal p {
+        margin-bottom: 25px;
+        color: #555;
+    }
+    .modal .close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 24px;
+        color: #888;
+        cursor: pointer;
+    }
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    .modal-cancel-btn {
+        padding: 10px 20px;
+        background-color: #95a5a6;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .modal-delete-btn {
+        padding: 10px 20px;
+        background-color: #e63946;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
         .edit-item-container {
             padding: 20px;
             margin: 20px 15px;
         }
-        
+        .form-columns {
+            flex-direction: column;
+            gap: 20px;
+        }
         .edit-form-actions {
             flex-direction: column;
         }
-        
         .edit-submit-btn,
-        .edit-cancel-btn {
+        .edit-cancel-btn,
+        .edit-delete-btn {
             width: 100%;
         }
-        
         .checkbox-group {
             flex-direction: column;
             align-items: flex-start;
         }
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+        }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Image preview functionality
+    const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const preview = document.querySelector('.profile-photo');
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.innerHTML = `
+                        <img src="${event.target.result}" alt="Preview">
+                        <div class="photo-overlay">
+                            <label for="{{ form.image.id_for_label }}" class="change-photo-btn">
+                                Change Image
+                            </label>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Auto-dismiss alerts
+    const alerts = document.querySelectorAll('[data-auto-dismiss]');
+    alerts.forEach(alert => {
+        const timeout = parseInt(alert.getAttribute('data-auto-dismiss'));
+        setTimeout(() => {
+            alert.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => alert.remove(), 300);
+        }, timeout);
+    });
+
+    // Close alerts manually
+    document.querySelectorAll('.edit-alert-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            this.parentElement.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => this.parentElement.remove(), 300);
+        });
+    });
+
+    // Delete confirmation modal
+    const deleteBtn = document.getElementById('deleteItemBtn');
+    const deleteModal = document.getElementById('deleteModal');
+    const modalClose = document.querySelector('.modal .close');
+    const modalCancel = document.querySelector('.modal-cancel-btn');
+
+    if (deleteBtn && deleteModal) {
+        deleteBtn.addEventListener('click', function() {
+            deleteModal.style.display = 'block';
+        });
+
+        modalClose.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+
+        modalCancel.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === deleteModal) {
+                deleteModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Show/hide quantity_advertise based on advertise checkbox
+    const advertiseCheckbox = document.querySelector('input[name="advertise"]');
+    const quantityAdvertiseGroup = document.getElementById('quantityAdvertiseGroup');
+
+    if (advertiseCheckbox && quantityAdvertiseGroup) {
+        function toggleAdvertiseQuantity() {
+            quantityAdvertiseGroup.style.display = advertiseCheckbox.checked ? 'block' : 'none';
+        }
+
+        // Initial state
+        toggleAdvertiseQuantity();
+        
+        // Add event listener
+        advertiseCheckbox.addEventListener('change', toggleAdvertiseQuantity);
+    }
+
+    // Form validation
+    const form = document.getElementById('editItemForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Validate price is not negative
+            const priceInput = document.querySelector('input[name="price"]');
+            if (priceInput && parseFloat(priceInput.value) < 0) {
+                e.preventDefault();
+                alert('Price cannot be negative');
+                priceInput.focus();
+                return false;
+            }
+
+            // Validate quantity is at least 1
+            const quantityInput = document.querySelector('input[name="quantity"]');
+            if (quantityInput && parseInt(quantityInput.value) < 1) {
+                e.preventDefault();
+                alert('Quantity must be at least 1');
+                quantityInput.focus();
+                return false;
+            }
+
+            return true;
+        });
+    }
+});
+
+// Add fadeOut animation to stylesheet
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-10px); }
+    }
+`;
+document.head.appendChild(style);
+// Conditional display of quantity_advertise field
+document.addEventListener('DOMContentLoaded', function() {
+    const advertiseCheckbox = document.querySelector('input[name="advertise"]');
+    const quantityAdvertiseGroup = document.getElementById('quantityAdvertiseGroup');
+
+    if (advertiseCheckbox && quantityAdvertiseGroup) {
+        function toggleAdvertiseQuantity() {
+            quantityAdvertiseGroup.style.display = advertiseCheckbox.checked ? 'block' : 'none';
+        }
+
+        // Initial state
+        toggleAdvertiseQuantity();
+        
+        // Add event listener
+        advertiseCheckbox.addEventListener('change', toggleAdvertiseQuantity);
+    }
+});
+</script>
 {% endblock %}

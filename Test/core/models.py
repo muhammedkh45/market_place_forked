@@ -37,7 +37,7 @@ class UserProfile(models.Model):
             return None
 
     def __str__(self):
-        return f"{self.user.first_name + self.user.last_name}'s Profile"
+        return f"{self.user.first_name} {self.user.last_name}"
     def getName(self):
         return self.user.username
 
@@ -73,7 +73,7 @@ class Review(models.Model):
         unique_together = ('user', 'transaction', 'product')
 
     def __str__(self):
-        return f"Review by {self.user.user.username} for {self.product.name}for transaction {self.transaction.transaction_id}"
+        return f"Review by {self.user} for {self.product.name}for transaction {self.transaction.transaction_id}"
     @staticmethod
     def get_average_rating(product):
         reviews = Review.objects.filter(product=product)

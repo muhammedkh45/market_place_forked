@@ -38,8 +38,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Type</th>
-                    <th>User</th>
-                    <th>Recipient</th>
+                    <th>to_party </th>
+                    <th>from_party </th>
                     <th>Product</th>
                     <th>Quantity</th>
                     <th>Unit Price</th>
@@ -54,8 +54,8 @@
                     {% if item.type == 'Transaction' %}
                         <td>T-{{ item.data.transaction_id }}</td>
                         <td>{{ item.type }}</td>
-                        <td>{{ item.data.buyer.user.username }}</td>
-                        <td>{{ item.data.seller.user.username }}</td>
+                        <td>{{ item.data.buyer }}</td>
+                        <td>{{ item.data.seller }}</td>
                         <td>{{ item.data.product.name }}</td>
                         <td>{{ item.data.quantity }}</td>
                         <td>{{ item.data.product.price }}</td>

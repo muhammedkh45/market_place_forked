@@ -19,7 +19,7 @@ class PaymentCard(models.Model):
         return f"**** **** **** {self.card_number[-4:]}"
     
     def __str__(self):
-        return f"{self.user.user.username}'s card details"
+        return f"{self.user.user.first_name} {self.user.user.last_name}'s card details"
 
 class Deposit(models.Model):
     STATUS_CHOICES = [

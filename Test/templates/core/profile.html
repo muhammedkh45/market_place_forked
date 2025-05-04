@@ -9,7 +9,6 @@
     {% else %}
         {% include 'parts/navbar.html' %}
     {% endif %}
-    
 {% endblock %}
 
 {% block content %}
@@ -26,9 +25,9 @@
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-photo">
-            <img src="{{ profile.photo.url }}" alt="{{ user.username }}'s profile photo">
+            <img src="{{ profile.photo.url }}" alt="{{ user.get_full_name|default:user.username }}'s profile photo">
             <div class="photo-overlay">
-                <label for="id_photo" class="change-photo-btn">
+                <label for="id_photo" class="change-photo-btn" aria-label="Change profile photo">
                     <i class="fas fa-camera"></i> Change Photo
                 </label>
             </div>
@@ -37,56 +36,50 @@
             <h1>{{ user.first_name }} {{ user.last_name }}'s Profile</h1>
             <p class="member-since">Member since {{ user.date_joined|date:"F j, Y" }}</p>
             {% if profile.date_of_birth %}
-                <p class="user-age" style="font-size: 16px; color: #555; font-weight: bold; margin-top: 5px;">
-                    Age: <span style="color: #555; font-weight: bold;">{{ profile.age }}</span>
+                <p class="user-age">
+                    Age: <strong>{{ profile.age }}</strong>
                 </p>
             {% endif %}
-                
-            
-
         </div>
-        
     </div>
-    
+
     <div class="profile-content">
         <form method="POST" enctype="multipart/form-data" class="profile-form">
             {% csrf_token %}
+
+            <!-- Login Info -->
             <div class="form-section">
                 <h2>Login Information</h2>
                 <div class="form-group">
-                    <label for="id_last_name">UserName</label>
+                    <label for="id_username">Username</label>
                     {{ form.username }}
                 </div>
                 <div class="form-group">
                     <label for="id_old_password">Old Password</label>
                     {{ form.old_password }}
                     {% if form.old_password.errors %}
-                        <div class="error-message">
-                            {{ form.old_password.errors|join:", " }}
-                        </div>
+                        <div class="error-message">{{ form.old_password.errors|join:", " }}</div>
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    <label for="id_password">New Password</label>
+                    <label for="id_new_password">New Password</label>
                     {{ form.new_password }}
                     {% if form.new_password.errors %}
-                        <div class="error-message">
-                            {{ form.new_password.errors|join:", " }}
-                        </div>
+                        <div class="error-message">{{ form.new_password.errors|join:", " }}</div>
                     {% endif %}
                 </div>
                 <div class="form-group">
                     <label for="id_confirm_password">Confirm New Password</label>
                     {{ form.confirm_password }}
                     {% if form.confirm_password.errors %}
-                        <div class="error-message">
-                            {{ form.confirm_password.errors|join:", " }}
-                        </div>
+                        <div class="error-message">{{ form.confirm_password.errors|join:", " }}</div>
                     {% endif %}
                 </div>
             </div>
+
+            <!-- Personal Info -->
             <div class="form-section">
-            <h2>Personal Information</h2>
+                <h2>Personal Information</h2>
                 <div class="form-group">
                     <label for="id_first_name">First Name</label>
                     {{ form.first_name }}
@@ -95,18 +88,17 @@
                     <label for="id_last_name">Last Name</label>
                     {{ form.last_name }}
                 </div>
-                
                 <div class="form-group">
                     <label for="id_email">Email</label>
                     {{ form.email }}
                 </div>
                 <div class="form-group">
-                    <label for="date_of_birth">Date of Birth</label>
+                    <label for="id_date_of_birth">Date of Birth</label>
                     {{ form.date_of_birth }}
                 </div>
-                
             </div>
 
+            <!-- Contact Info -->
             <div class="form-section">
                 <h2>Contact Information</h2>
                 <div class="form-group">
@@ -114,11 +106,12 @@
                     {{ form.phone }}
                 </div>
                 <div class="form-group">
-                    <label for="id_address" class="label-disabled">Address</label>
+                    <label for="id_address">Address</label>
                     {{ form.address }}
                 </div>
             </div>
 
+            <!-- About -->
             <div class="form-section">
                 <h2>About Me</h2>
                 <div class="form-group">
@@ -127,10 +120,12 @@
                 </div>
             </div>
 
+            <!-- Hidden Photo Field -->
             <div class="form-group hidden">
                 {{ form.photo }}
             </div>
 
+            <!-- Submit -->
             <div class="form-actions">
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
@@ -139,33 +134,30 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', () => {
     const photoInput = document.getElementById('id_photo');
     const profileImage = document.querySelector('.profile-photo img');
 
-    
+    if (photoInput) {
+        photoInput.addEventListener('change', function() {
+            const file = this.files?.[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 
-    photoInput.addEventListener('change', function() {
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                profileImage.src = e.target.result;
-            };
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
-
-    const messages = document.querySelectorAll('.alert');
-    messages.forEach(message => {
+    // Auto-dismiss messages
+    document.querySelectorAll('.alert').forEach(msg => {
         setTimeout(() => {
-            message.classList.add('fade-out');
-            setTimeout(() => {
-                message.remove();
-            }, 500);
+            msg.classList.add('fade-out');
+            setTimeout(() => msg.remove(), 500);
         }, 10000);
     });
 });
 </script>
-
 {% endblock %}

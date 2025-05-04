@@ -6,9 +6,11 @@ from django.shortcuts import get_object_or_404, redirect
 from .forms import ItemForm
 from django.contrib import messages
 from decimal import Decimal
+from django.contrib.auth.decorators import login_required
+from items.models import Items  # Make sure this import exists
 
 
-
+@login_required(login_url='login')
 def account_page(request):
     user_profile = None
     available_items = None
@@ -23,7 +25,7 @@ def account_page(request):
             available_items = None
 
     return render(request, 'inventory/inventory.html', {'available_items': available_items,'categories': categories})
-
+@login_required(login_url='login')
 def item_detail(request, id):
     product = Items.objects.get(id=id)
     return render(request, 'inventory/item_detail.html', {'product': product})
@@ -53,12 +55,15 @@ def edit_item(request, id):
         return render(request, 'inventory/edit_item.html', {'form': form, 'title': 'Edit Item', 'item': item})
 
 @login_required(login_url='login')
-def delete_item(request, id):
-    item = get_object_or_404(Items, id=id)
-
-    item.delete()
-    messages.success(request, 'Item deleted successfully!')
+def delete_item(request, item_id):
+    if request.method == 'POST':
+        item = get_object_or_404(Items, id=item_id)
+        item.delete()
+        messages.success(request, 'Item deleted successfully.')
+        return redirect('Inventory')  # Make sure 'inventory' is the correct URL name
+    # If not POST, redirect back to inventory
     return redirect('Inventory')
+
 
 @login_required
 def add_item(request):

@@ -6,5 +6,6 @@ urlpatterns = [
     path('',views.items,name='Items'),
     path('product_<int:item_id>/', views.item, name='item'),# URL for individual item
     path('filter1/', views.filter1, name='filter1'),# URL for category
+    path('category/<int:category_id>/', views.category_detail, name='category_detail'),
     
 ]
