@@ -60,20 +60,17 @@ class ContactUsForm(forms.ModelForm):
         fields = ['name', 'email', 'message']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'form-control w-full py-4 px-6 rounded-xl',
                 'placeholder': 'Your Name',
-                'class' :'w-full py-4 px-6 rounded-xl'
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'form-control',
+                'class': 'form-control w-full py-4 px-6 rounded-xl',
                 'placeholder': 'Your Email',
-                'class' :'w-full py-4 px-6 rounded-xl'
             }),
             'message': forms.Textarea(attrs={
-                'class': 'form-control',
+                'class': 'form-control w-full py-4 px-6 rounded-xl',
                 'placeholder': 'Your Message',
                 'rows': 5,
-                'class' :'w-full py-4 px-6 rounded-xl'
             }),
         }
 

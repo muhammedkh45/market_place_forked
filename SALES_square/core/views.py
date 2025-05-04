@@ -20,6 +20,8 @@ from django.contrib.auth import authenticate, login as django_login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from .forms import ContactUsForm  # Make sure this is imported
+
 
 @api_view(['POST'])
 def login(request):
@@ -145,8 +147,18 @@ def about(request):
     return render(request,'core/about.html', {})
 
 def contactUS(request):
-    
-    return render(request,'core/contactus.html', {})
+    if request.method == 'POST':
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your message has been sent successfully.")
+            return redirect('ContactUs')  # Prevent resubmission on refresh
+        else:
+            messages.error(request, "There was an error with your submission. Please check the form.")
+    else:
+        form = ContactUsForm()
+
+    return render(request, 'core/contactus.html', {'form': form})
 
 def terms(request):
     return render(request,'core/terms.html', {})
