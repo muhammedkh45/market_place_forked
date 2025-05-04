@@ -264,7 +264,8 @@ from django.db.models import Avg, Count, Q  # Add this import
 from .models import UserProfile
 
 def user_detail(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    UserProfile = get_object_or_404(UserProfile, id=user_id)
+    user=UserProfile.user
     try:
         profile = user.profile
         # Only include products with rating > 0 in the calculation
