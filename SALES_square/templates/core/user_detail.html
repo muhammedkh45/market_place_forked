@@ -1,17 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 
-    
-    {% block navbar %}
-        {% if user.is_authenticated %}
-            {% include 'parts/navbarwithoutforms.html' %}
-        {% else %}
-            {% include 'parts/navbar.html' %}
-        {% endif %}
-    {% endblock %}
-    
-    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+{% block navbar %}
+    {% if user.is_authenticated %}
+        {% include 'parts/navbarwithoutforms.html' %}
+    {% else %}
+        {% include 'parts/navbar.html' %}
+    {% endif %}
+{% endblock %}
 
+<link rel="stylesheet" href="{% static 'css/messages.css' %}">
 
 {% block content %}
 {% block messages %}
@@ -23,6 +21,232 @@
     </div>
 {% endif %}
 {% endblock %}
+
+<style>
+    :root {
+        --primary-color: #00E5D4;
+        --primary-hover: #00C4B5;
+        --secondary-color: #6c757d;
+        --light-bg: #f8f9fa;
+        --dark-text: #333;
+        --medium-text: #666;
+        --light-text: #888;
+        --border-color: #eee;
+        --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
+        --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 5px 15px rgba(0,0,0,0.1);
+        --border-radius: 8px;
+        --transition: all 0.3s ease;
+    }
+
+    .profile-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid var(--primary-color);
+        background-color: var(--light-bg);
+    }
+    
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .profile-info h1 {
+        margin: 0;
+        color: var(--dark-text);
+    }
+    
+    .member-since {
+        color: var(--light-text);
+        font-size: 0.9rem;
+    }
+    
+    .profile-details {
+        display: grid;
+        gap: 2rem;
+    }
+    
+    .detail-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .detail-card h3 {
+        margin-top: 0;
+        color: var(--dark-text);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+    }
+    
+    .bio {
+        margin: 1rem 0;
+        line-height: 1.6;
+        color: var(--medium-text);
+    }
+    
+    .contact-info {
+        display: grid;
+        gap: 1rem;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .info-item i {
+        color: var(--primary-color);
+        width: 20px;
+        text-align: center;
+    }
+    
+    .user-products h2 {
+        margin: 2rem 0 1rem;
+        color: var(--dark-text);
+    }
+    
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .product-card {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .product-image-container {
+        width: 100%;
+        height: 200px;
+        padding: 15px;
+        background-color: var(--light-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .product-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: var(--transition);
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+    
+    .product-info {
+        padding: 1rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-info h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .product-info h3 a {
+        color: var(--dark-text);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+    
+    .product-info h3 a:hover {
+        color: var(--primary-color);
+    }
+    
+    .price {
+        color: var(--primary-color);
+        font-weight: bold;
+        margin: 0.5rem 0;
+    }
+    
+    .created-date {
+        color: var(--light-text);
+        font-size: 0.8rem;
+        margin: 0.5rem 0 0;
+    }
+    
+    .no-products {
+        color: var(--medium-text);
+        text-align: center;
+        padding: 2rem;
+        background: var(--light-bg);
+        border-radius: var(--border-radius);
+    }
+    
+    .rating-summary {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+    }
+    
+    .stars {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 8px;
+    }
+    
+    .rating-value {
+        color: var(--medium-text);
+    }
+    
+    .no-rating {
+        color: var(--light-text);
+    }
+    
+    .fa-star {
+        color: gold;
+        margin-right: 2px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+    }
+</style>
+
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-photo">
@@ -93,9 +317,11 @@
             <div class="products-grid">
                 {% for product in products %}
                 <div class="product-card">
-                    <a href="{% url 'item' product.id %}">
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-                    </a>
+                    <div class="product-image-container">
+                        <a href="{% url 'item' product.id %}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                        </a>
+                    </div>
                     <div class="product-info">
                         <h3><a href="{% url 'item' product.id %}">{{ product.name }}</a></h3>
                         <p class="price">${{ product.price }}</p>
@@ -110,193 +336,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .profile-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
-    
-    .profile-header {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .profile-photo {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 3px solid #00E5D4;
-    }
-    
-    .profile-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .profile-info h1 {
-        margin: 0;
-        color: #333;
-    }
-    
-    .username {
-        color: #666;
-        margin: 0.5rem 0;
-    }
-    
-    .member-since {
-        color: #888;
-        font-size: 0.9rem;
-    }
-    
-    .profile-details {
-        display: grid;
-        gap: 2rem;
-    }
-    
-    .detail-card {
-        background: white;
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .detail-card h3 {
-        margin-top: 0;
-        color: #333;
-        border-bottom: 2px solid #00E5D4;
-        padding-bottom: 0.5rem;
-        display: inline-block;
-    }
-    
-    .bio {
-        margin: 1rem 0;
-        line-height: 1.6;
-    }
-    
-    .contact-info {
-        display: grid;
-        gap: 1rem;
-    }
-    
-    .info-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-    
-    .info-item i {
-        color: #00E5D4;
-        width: 20px;
-        text-align: center;
-    }
-    
-    .user-products h2 {
-        margin: 2rem 0 1rem;
-        color: #333;
-    }
-    
-    .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
-    }
-    
-    .product-card {
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        transition: transform 0.3s ease;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .product-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-    
-    .product-info {
-        padding: 1rem;
-    }
-    
-    .product-info h3 {
-        margin: 0 0 0.5rem;
-        font-size: 1.1rem;
-    }
-    
-    .product-info h3 a {
-        color: #333;
-        text-decoration: none;
-    }
-    
-    .product-info h3 a:hover {
-        color: #00E5D4;
-    }
-    
-    .price {
-        color: #00E5D4;
-        font-weight: bold;
-        margin: 0.5rem 0;
-    }
-    
-    .created-date {
-        color: #888;
-        font-size: 0.8rem;
-        margin: 0.5rem 0 0;
-    }
-    
-    .no-products {
-        color: #666;
-        text-align: center;
-        padding: 2rem;
-        background: #f9f9f9;
-        border-radius: 8px;
-    }
-    
-    @media (max-width: 768px) {
-        .profile-header {
-            flex-direction: column;
-            text-align: center;
-        }
-        
-        .products-grid {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        }
-    }
-    .rating-summary {
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-    }
-    
-    .stars {
-        display: inline-flex;
-        align-items: center;
-        margin-right: 8px;
-    }
-    
-    .rating-value {
-        color: #666;
-    }
-    
-    .no-rating {
-        color: #999;
-    }
-    
-    .fa-star {
-        color: gold;
-        margin-right: 2px;
-    }
-</style>
 {% endblock %}
