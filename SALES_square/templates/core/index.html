@@ -286,14 +286,23 @@
     }
 
     /* Individual Items */
+    .items {
+        display: flex;
+        gap: 1.25rem;
+        width: max-content;
+        padding-bottom: 0.5rem;
+        align-items: stretch; /* Make all cards equal height */
+    }
+    
     .item {
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow-sm);
-        padding: 1rem;
-        transition: var(--transition);
-        min-width: 300px;
-        flex-shrink: 0;
+        /* ... existing styles ... */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Push content to top and buttons to bottom */
+    }
+    
+    .item-content {
+        flex: 1; /* Take remaining space */
     }
 
     .item:hover {
@@ -301,17 +310,22 @@
         box-shadow: var(--shadow-lg);
     }
 
-    .item img {
+    item img {
         width: 100%;
-        height: 180px;
-        object-fit: cover;
+        height: 180px; /* Fixed height for consistency */
+        object-fit: contain; /* Changed from 'cover' to 'contain' to show full product */
+        object-position: center; /* Center the image */
         border-radius: 4px;
         margin-bottom: 0.75rem;
         transition: var(--transition);
+        background-color: #f8f8f8; /* Light background for transparent images */
+        padding: 10px; /* Add some spacing around the image */
+        box-sizing: border-box; /* Include padding in width/height */
     }
-
+    
     .item:hover img {
         opacity: 0.9;
+        transform: scale(1.02); /* Slight zoom on hover for better visibility */
     }
 
     .item h2 {
@@ -516,25 +530,27 @@
                         <div class="items">
                             {% for product in pro %}
                                 {% if product.category.id == category.id and product.for_sale %}
-                                    <div class="item" 
-                                        data-category="{{ product.category.id }}" 
-                                        data-price="{{ product.price }}"
-                                        data-name="{{ product.name|lower }}"
-                                        data-seller="{{ product.seller.username|lower }}"
-                                        data-category-name="{{ product.category.name|lower }}">
-                                        <a href="{% url 'item' product.id %}">
-                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                                        </a>
-                                        <h2>
-                                            {{ product.name }}
-                                            {% if product.average_rating > 0 %}
-                                                <span style="color: gold;">
-                                                    {{ product.average_rating }} <i class="fa fa-star"></i>
-                                                </span>
-                                            {% endif %}
-                                        </h2>
-                                        <p><strong>Price:</strong> ${{ product.price }}</p>
-                                        <p><strong>Stock:</strong> {{ product.quantity }} available</p>
+                                <div class="item" 
+                                data-category="{{ product.category.id }}" 
+                                data-price="{{ product.price }}"
+                                data-name="{{ product.name|lower }}"
+                                data-seller="{{ product.seller.username|lower }}"
+                                data-category-name="{{ product.category.name|lower }}">
+                                <div class="item-content">
+                                    <a href="{% url 'item' product.id %}">
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    </a>
+                                    <h2>
+                                        {{ product.name }}
+                                        {% if product.average_rating > 0 %}
+                                            <span style="color: gold;">
+                                                {{ product.average_rating }} <i class="fa fa-star"></i>
+                                            </span>
+                                        {% endif %}
+                                    </h2>
+                                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                                    <p><strong>Stock:</strong> {{ product.quantity }} available</p>
+                                </div>
                                         
                                         <form action="{% url 'add_to_cart' %}" method="get" style="display: flex; align-items: center; gap: 10px;">
                                             <div>
