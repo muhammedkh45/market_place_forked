@@ -285,11 +285,98 @@
         background: #03b8ac;
     }
 
-    /* Ensure consistent card heights */
+    /* Item Card Container */
     .item-card {
-        min-height: 150px;
+        display: flex;
+        gap: 15px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 15px;
     }
 
+    .item-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Image Container */
+    .item-img {
+        width: 150px;
+        height: 150px;
+        min-width: 150px;
+        background-color: #f8f8f8;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .item-img img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .item-card:hover .item-img img {
+        transform: scale(1.05);
+    }
+
+    /* Item Details */
+    .item-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .item-details h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .item-details p {
+        margin: 5px 0;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .item-details strong {
+        color: #333;
+    }
+
+    /* Action Buttons */
+    .item-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        min-width: 120px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .item-card {
+            flex-direction: column;
+        }
+        
+        .item-img {
+            width: 100%;
+            height: 200px;
+        }
+        
+        .item-actions {
+            flex-direction: row;
+            margin-top: 15px;
+        }
+    }
     .remove-category-btn {
         background-color: black;
     }
