@@ -10,42 +10,17 @@ This project is a **distributed online marketplace platform** built using **Djan
 * **Authentication:** Django built-in auth system
 * **Architecture:** RESTful, modular, distributed schema design
 
-## Core Features
-
-### User Account Management
-
-* User registration and login
-* Authentication and session handling
-
-### Product and Inventory Management
-
-* Add, edit, and delete items for sale
-* View and manage personal inventory
-
-### Transactions and Payments
-
-* Deposit funds into user wallet
-* Purchase items listed by other users
-* Automatic transfer of funds and item ownership
-
-### Search and Discovery
-
-* Search functionality to browse products listed by others
-
-### Account Overview
-
-* View account balance
-* List of purchased items
-* List of sold items
-* Current inventory
-
-### Reporting
-
-* Generate reports for transaction history, sales, and purchases
-
-### External Store Integration
-
-* Provides a REST API interface that allows third-party stores to seamlessly integrate and list products from our platform onto theirs
+How to Use the System
+- Visit → [SALES Square](https://marketplace-production-ba97.up.railway.app)
+- Register/Login → Create a new account and access marketplace features
+- Edit Profile → Update name, email, and other personal details
+- Deposit Funds → Add money to your account wallet to enable purchases
+- Manage Inventory → Sellers can add, edit, and delete their own products
+- Buy Products → Browse listings, add items to cart, and checkout securely
+- Leave Reviews → Rate purchased products and sellers
+- Generate Reports → View transaction and deposit history
+- Explore Profiles → View your own profile or other users' product listings and ratings
+- Provides a REST API interface that allows third-party stores to seamlessly integrate and list products from our platform onto theirs
 
 ## Implemented REST APIs
 
@@ -75,8 +50,6 @@ Below are sample screenshots of the system in use:
 ![Home Page](screenshots/home.png)
 ![Inventory](screenshots/inventory.png)
 
-> *Ensure you place actual screenshots in a `screenshots/` directory in your repo or update the paths to match your project structure.*
-
 ## Getting Started
 
 ### Initial Deployment
@@ -85,10 +58,6 @@ Below are sample screenshots of the system in use:
 2. Configure all required environment variables
 3. Set up persistent volumes
 4. Trigger initial deployment
-
-```bash
-git push origin main
-```
 
 ### Post-Deployment Setup
 
@@ -104,38 +73,24 @@ railway run python manage.py createsuperuser
 # Load initial data (optional)
 railway run python manage.py loaddata initial_data.json
 ```
-
-## Monitoring and Maintenance
-
-Railway provides:
-
-* Real-time application logs
-* Performance monitoring dashboards
-* Automatic health checks (available at `/health/`)
-* Resource utilization metrics
-
-## Development Workflow
-
-### CI/CD Pipeline
-
-1. Code pushed to main branch triggers automated build
-2. Test suite runs (pytest)
-3. If tests pass:
-
-   * Docker image is built
-   * New version is deployed to production
-   * Database migrations run automatically
-
 ### Local Development
 
 To mirror the Railway environment locally:
 
 ```bash
-# Install dependencies
-pip install -r SALES_square/requirements.txt
+# Clone the repository
+git clone <[repo-url](https://github.com/MoustafaHashem/Marketplace.git)>
+cd SALES_square
 
-# Run with Railway environment
-railway run python manage.py runserver
+# Set up a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv/Scripts/activate
+
+# Create a superuser (optional)
+python manage.py createsuperuser
+
+# Run the development server
+python manage.py runserver
 ```
 
 ## Distributed Database Design
