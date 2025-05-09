@@ -73,8 +73,7 @@ Third-party stores can integrate with our marketplace by:
 Below are sample screenshots of the system in use:
 
 ![Home Page](screenshots/home.png)
-![User Dashboard](screenshots/dashboard.png)
-![Product Listing](screenshots/product_list.png)
+![Inventory](screenshots/inventory.png)
 
 > *Ensure you place actual screenshots in a `screenshots/` directory in your repo or update the paths to match your project structure.*
 
