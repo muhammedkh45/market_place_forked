@@ -11,7 +11,7 @@ This project is a **distributed online marketplace platform** built using **Djan
 * **Architecture:** RESTful, modular, distributed schema design
 
 How to Use the System
-- Visit → [SALES Square](https://marketplace-production-ba97.up.railway.app)
+- Visit → [SALES Square](https://market-place-forked.onrender.com)
 - Register/Login → Create a new account and access marketplace features
 - Edit Profile → Update name, email, and other personal details
 - Deposit Funds → Add money to your account wallet to enable purchases
@@ -131,4 +131,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For questions or support, please [contact us](https://marketplace-production-ba97.up.railway.app/contactus) or open an issue in the repository.
+For questions or support, please [contact us](https://market-place-forked.onrender.com/contactus) or open an issue in the repository.
