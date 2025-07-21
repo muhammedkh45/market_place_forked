@@ -79,7 +79,7 @@ To mirror the Railway environment locally:
 
 ```bash
 # Clone the repository
-git clone <https://github.com/MoustafaHashem/Marketplace.git>
+git clone <https://github.com/muhammedkh45/market_place_forked>
 cd SALES_square
 
 # Set up a virtual environment
