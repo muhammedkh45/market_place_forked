@@ -13,9 +13,15 @@ import os
 from pathlib import Path
 from django.contrib.messages import constants as message_constants
 import dj_database_url
+import psycopg2
+from dotenv import load_dotenv
+ 
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 CSRF_TRUSTED_ORIGINS= ["https://marketplace-production-ba97.up.railway.app"]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
@@ -92,11 +98,11 @@ WSGI_APPLICATION = 'Test.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'gpcayHhqcytIiXTvaIByNARJOpTWiYdv',
-        'HOST': 'turntable.proxy.rlwy.net',
-        'PORT': '19684',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
